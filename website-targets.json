@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "IndoBSD",
+    "url": "https://indobsd.id/",
+    "group": "Internal",
+    "enabled": true
+  },
+  {
+    "id": 2,
+    "name": "PBDjarum",
+    "url": "https://pbdjarum.org/",
+    "group": "External",
+    "enabled": true
+  },
+  {
+    "id": 3,
+    "name": "Repository",
+    "url": "https://repo.indobsd.id",
+    "group": "Internal",
+    "enabled": true
+  },
+  {
+    "id": 4,
+    "name": "Facebook",
+    "url": "https://www.facebook.com/",
+    "group": "General Website",
+    "enabled": true
+  },
+  {
+    "id": 5,
+    "name": "Google",
+    "url": "https://www.google.com",
+    "group": "General Website",
+    "enabled": true
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "indobsd.id",
+    "registrar": "469366_DOMAIN_ID-ID",
+    "expiration_date": "2026-05-13T23:59",
+    "auto_renew": true,
+    "group": "Internal",
+    "enabled": true,
+    "last_checked": "2025-11-29T21:49:16.862Z"
+  },
+  {
+    "id": 2,
+    "name": "NOC-SYSTEM.COM",
+    "registrar": "squarespace.com",
+    "expiration_date": "2027-08-13T00:28",
+    "auto_renew": true,
+    "group": "DIonipe",
+    "enabled": true,
+    "last_checked": "2025-11-29T21:52:15.843Z"
+  },
+  {
+    "id": 3,
+    "name": "DIONIPE.ID",
+    "registrar": "www.kilatdomain.id",
+    "expiration_date": "2026-02-01T06:32",
+    "auto_renew": false,
+    "group": "dionipe",
+    "enabled": true,
+    "last_checked": "2025-11-29T21:53:52.784Z"
+  }
+]
