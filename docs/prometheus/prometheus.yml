@@ -1,0 +1,27 @@
+# Example Prometheus configuration for SMon
+# Add this to your prometheus.yml file
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'smon'
+    static_configs:
+      - targets: ['localhost:3000']  # Replace with your SMon server address
+    scrape_interval: 30s
+    metrics_path: '/metrics'
+    # No authentication required for /metrics endpoint
+
+  # Example for multiple SMon instances
+  - job_name: 'smon-production'
+    static_configs:
+      - targets: ['smon-prod.company.com:3000']
+    scrape_interval: 30s
+    metrics_path: '/metrics'
+
+  - job_name: 'smon-staging'
+    static_configs:
+      - targets: ['smon-staging.company.com:3000']
+    scrape_interval: 30s
+    metrics_path: '/metrics'

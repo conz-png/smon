@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domain Monitoring - SMon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1/dist/chartjs-adapter-luxon.umd.min.js"></script>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-gray-100 min-h-screen">
+    <div class="flex h-screen">
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-gradient-to-br from-slate-800 to-slate-900 p-3 rounded-xl border border-slate-700/50 shadow-xl hover:shadow-2xl hover:border-slate-600/70 transition-all duration-300 group">
+            <i class="fas fa-bars text-white group-hover:scale-110 transition-transform duration-200"></i>
+        </button>
+
+        <!-- Mobile Overlay -->
+        <div id="mobile-overlay" class="md:hidden fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-30 hidden"></div>
+
+        <!-- Sidebar -->
+        <div id="sidebar" class="w-64 bg-gradient-to-b from-slate-950 to-slate-900 border-r border-slate-700/50 shadow-2xl flex flex-col fixed md:relative inset-y-0 left-0 z-40 transform -translate-x-full md:translate-x-0 transition-all duration-300 ease-in-out">
+            <!-- Header -->
+            <div class="p-6 border-b border-slate-700/50 bg-gradient-to-r from-slate-900/50 to-slate-800/50">
+                <div class="flex items-center gap-3 mb-1">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 group">
+                        <i class="fas fa-chart-line text-white font-bold text-lg group-hover:scale-110 transition-transform duration-200"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-white">SMon</h1>
+                        <p class="text-xs text-gray-400">SNMP Monitor</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 px-4 py-6 overflow-y-auto">
+                <div class="space-y-2">
+                    <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-chart-area w-5 group-hover:scale-110 transition-transform duration-200"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="/monitoring" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-gauge-high w-5 group-hover:scale-110 transition-transform duration-200"></i>
+                        <span>Bandwidth Monitor</span>
+                    </a>
+                    <a href="/ping" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-network-wired w-5 group-hover:scale-110 transition-transform duration-200"></i>
+                        <span>Ping Monitor</span>
+                    </a>
+                    <a href="/websites" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-globe w-5 group-hover:scale-110 transition-transform duration-200"></i>
+                        <span>Website Monitor</span>
+                    </a>
+                    <a href="/domains" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium transition-all hover:shadow-lg hover:shadow-blue-500/25 hover:scale-[1.02] group">
+                        <i class="fas fa-at w-5 group-hover:scale-110 transition-transform duration-200"></i>
+                        <span>Domain Monitor</span>
+                    </a>
+                    <a href="/devices" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-server w-5 group-hover:scale-110 transition-transform duration-200"></i>
+                        <span>Devices</span>
+                    </a>
+                    <a href="/history" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-history w-5 group-hover:scale-110 transition-transform duration-200"></i>
+                        <span>History</span>
+                    </a>
+                    <a href="/status" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-tachometer-alt w-5 group-hover:scale-110 transition-transform duration-200"></i>
+                        <span>Status</span>
+                    </a>
+                    <a href="/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-cog w-5 group-hover:scale-110 transition-transform duration-200"></i>
+                        <span>Settings</span>
+                    </a>
+                    <a href="/about" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-info-circle w-5 group-hover:scale-110 transition-transform duration-200"></i>
+                        <span>About</span>
+                    </a>
+                    <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-gradient-to-r hover:from-red-500/20 hover:to-red-600/20 hover:text-red-300 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] mt-4 group">
+                        <i class="fas fa-sign-out-alt w-5 group-hover:scale-110 transition-transform duration-200"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+
+            <!-- Footer -->
+            <div class="px-4 py-4 border-t border-slate-700/50 bg-gradient-to-r from-slate-900/30 to-slate-800/30">
+                <div class="text-xs text-gray-500 text-center">
+                    <p class="font-medium">SNMP Monitor v2.0.1</p>
+                    <p class="text-gray-600">Network Intelligence</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-auto md:ml-0">
+            <!-- Top Header -->
+            <div class="bg-gradient-to-r from-slate-950 to-slate-900 border-b border-slate-700/50 px-4 md:px-8 py-4 sticky top-0 z-20 shadow-xl">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                            <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
+                                <i class="fas fa-at text-white text-sm"></i>
+                            </div>
+                            Domain Monitoring
+                        </h2>
+                        <p class="text-gray-400 text-sm mt-1">Monitor domain expiration dates and availability</p>
+                    </div>
+
+                    <!-- System Stats -->
+                    <div class="flex flex-wrap gap-3 text-xs">
+                        <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-blue-500/40 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 hover:scale-105 group">
+                            <div class="w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                                <i class="fas fa-microchip text-white text-xs"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 font-medium">CPU</p>
+                                <p class="text-white font-semibold" id="header-cpu">--%</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-green-500/40 hover:shadow-lg hover:shadow-green-500/20 transition-all duration-300 hover:scale-105 group">
+                            <div class="w-6 h-6 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                                <i class="fas fa-memory text-white text-xs"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 font-medium">Memory</p>
+                                <p class="text-white font-semibold" id="header-memory">--%</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-purple-500/40 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 hover:scale-105 group">
+                            <div class="w-6 h-6 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                                <i class="fas fa-clock text-white text-xs"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 font-medium">Uptime</p>
+                                <p class="text-white font-semibold" id="header-uptime">--</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <main class="flex-1 overflow-y-auto p-6">
+                <!-- Add Domain Button -->
+                <div class="mb-6">
+                    <button id="add-domain-btn" class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3 group">
+                        <i class="fas fa-plus group-hover:scale-110 transition-transform duration-200"></i>
+                        Add Domain
+                    </button>
+                </div>
+
+                <!-- Domain Status Cards -->
+                <div id="domain-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <!-- Cards will be populated by JavaScript -->
+                </div>
+
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <!-- Domain Expiration Timeline -->
+                    <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-6 shadow-2xl">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-calendar-alt text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white">Domain Expiration Timeline</h3>
+                                <p class="text-gray-400 text-sm">Days until expiration</p>
+                            </div>
+                        </div>
+                        <div class="h-64">
+                            <canvas id="expirationChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Domain Status Distribution -->
+                    <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-6 shadow-2xl">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-chart-pie text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white">Domain Status Distribution</h3>
+                                <p class="text-gray-400 text-sm">Active vs Expiring Soon</p>
+                            </div>
+                        </div>
+                        <div class="h-64">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Domain List Table -->
+                <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 shadow-2xl overflow-hidden">
+                    <div class="p-6 border-b border-slate-700/50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-list text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white">Domain List</h3>
+                                <p class="text-gray-400 text-sm">Detailed domain information and status</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-slate-700/30">
+                                <tr>
+                                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Domain</th>
+                                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Registrar</th>
+                                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Expiration Date</th>
+                                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Days Left</th>
+                                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Auto Renew</th>
+                                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="domain-table-body" class="divide-y divide-slate-700/30">
+                                <!-- Table rows will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        // Global chart instances
+        let expirationChart = null;
+        let statusChart = null;
+        let pollingIntervalMs = <%= pollingIntervalSeconds * 1000 %>; // Auto-refresh interval from settings
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('mobile-overlay').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.add('-translate-x-full');
+            this.classList.add('hidden');
+        });
+
+        // Update header stats
+        async function updateHeaderStats() {
+            try {
+                const response = await fetch('/api/system-info');
+                const data = await response.json();
+
+                if (document.getElementById('header-cpu') && data.cpu) {
+                    document.getElementById('header-cpu').textContent = `${data.cpu.usage.toFixed(1)}%`;
+                }
+                if (document.getElementById('header-memory') && data.memory) {
+                    const memoryUsedGB = (data.memory.used / 1024 / 1024 / 1024).toFixed(1);
+                    const memoryTotalGB = (data.memory.total / 1024 / 1024 / 1024).toFixed(1);
+                    document.getElementById('header-memory').textContent = `${memoryUsedGB}/${memoryTotalGB}GB`;
+                }
+                if (document.getElementById('header-storage') && data.storage) {
+                    const storageUsedGB = (data.storage.used / 1024 / 1024 / 1024).toFixed(1);
+                    const storageTotalGB = (data.storage.total / 1024 / 1024 / 1024).toFixed(1);
+                    document.getElementById('header-storage').textContent = `${storageUsedGB}/${storageTotalGB}GB`;
+                }
+            } catch (err) {
+                console.error('Error fetching system info:', err);
+            }
+        }
+
+        // Load domain data
+        async function loadDomainData() {
+            try {
+                const response = await fetch('/api/domain-targets');
+                const domains = await response.json();
+
+                updateDomainCards(domains);
+                updateCharts(domains);
+                updateDomainTable(domains);
+            } catch (error) {
+                console.error('Error loading domain data:', error);
+            }
+        }
+
+        // Update domain status cards
+        function updateDomainCards(domains) {
+            const container = document.getElementById('domain-cards');
+
+            if (domains.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-8 shadow-2xl text-center">
+                        <div class="w-16 h-16 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-at text-purple-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">No Domains Configured</h3>
+                        <p class="text-gray-400">Add domain targets to start monitoring expiration dates</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = domains.map(domain => {
+                const daysLeft = Math.ceil((new Date(domain.expiration_date) - new Date()) / (1000 * 60 * 60 * 24));
+                const isExpiringSoon = daysLeft <= 30;
+                const isExpired = daysLeft < 0;
+
+                let statusColor, statusText, statusIcon, bgColor;
+
+                if (isExpired) {
+                    statusColor = 'red';
+                    statusText = 'Expired';
+                    statusIcon = 'fas fa-exclamation-triangle';
+                    bgColor = 'from-red-500/20 to-red-600/20';
+                } else if (isExpiringSoon) {
+                    statusColor = 'yellow';
+                    statusText = `${daysLeft} days`;
+                    statusIcon = 'fas fa-clock';
+                    bgColor = 'from-yellow-500/20 to-yellow-600/20';
+                } else {
+                    statusColor = 'green';
+                    statusText = `${daysLeft} days`;
+                    statusIcon = 'fas fa-check-circle';
+                    bgColor = 'from-green-500/20 to-green-600/20';
+                }
+
+                return `
+                    <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-6 shadow-2xl hover:shadow-3xl transition-all duration-300 group">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-gradient-to-br ${bgColor} rounded-lg flex items-center justify-center">
+                                    <i class="${statusIcon} text-${statusColor}-400"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-white">${domain.name}</h3>
+                                    <p class="text-gray-400 text-sm">${domain.registrar || 'Unknown Registrar'}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-${statusColor}-400 font-semibold">${statusText}</p>
+                                <p class="text-gray-400 text-xs">until expiry</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-400">Expiration:</span>
+                                <span class="text-white">${new Date(domain.expiration_date).toLocaleDateString()}</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-400">Auto Renew:</span>
+                                <span class="text-white">${domain.auto_renew ? 'Yes' : 'No'}</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-400">Last Checked:</span>
+                                <span class="text-white">${domain.last_checked ? new Date(domain.last_checked).toLocaleString() : 'Never'}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Update charts
+        function updateCharts(domains) {
+            // Destroy existing charts
+            if (expirationChart) {
+                expirationChart.destroy();
+            }
+            if (statusChart) {
+                statusChart.destroy();
+            }
+
+            // Expiration timeline chart
+            const ctx1 = document.getElementById('expirationChart').getContext('2d');
+            const expirationData = domains.map(domain => ({
+                label: domain.name,
+                data: [{
+                    x: new Date(domain.expiration_date),
+                    y: Math.ceil((new Date(domain.expiration_date) - new Date()) / (1000 * 60 * 60 * 24))
+                }]
+            }));
+
+            expirationChart = new Chart(ctx1, {
+                type: 'scatter',
+                data: {
+                    datasets: expirationData.map((item, index) => ({
+                        label: item.label,
+                        data: item.data,
+                        backgroundColor: `hsl(${(index * 137.5) % 360}, 70%, 50%)`,
+                        borderColor: `hsl(${(index * 137.5) % 360}, 70%, 50%)`,
+                        borderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }))
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Expiration Date'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Days Left'
+                            },
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Status distribution chart
+            const ctx2 = document.getElementById('statusChart').getContext('2d');
+            const expired = domains.filter(d => new Date(d.expiration_date) < new Date()).length;
+            const expiringSoon = domains.filter(d => {
+                const daysLeft = Math.ceil((new Date(d.expiration_date) - new Date()) / (1000 * 60 * 60 * 24));
+                return daysLeft >= 0 && daysLeft <= 30;
+            }).length;
+            const active = domains.length - expired - expiringSoon;
+
+            statusChart = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Active', 'Expiring Soon', 'Expired'],
+                    datasets: [{
+                        data: [active, expiringSoon, expired],
+                        backgroundColor: [
+                            'rgba(34, 197, 94, 0.8)',
+                            'rgba(251, 191, 36, 0.8)',
+                            'rgba(239, 68, 68, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(34, 197, 94, 1)',
+                            'rgba(251, 191, 36, 1)',
+                            'rgba(239, 68, 68, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: 'white',
+                                padding: 20
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update domain table
+        function updateDomainTable(domains) {
+            const tbody = document.getElementById('domain-table-body');
+
+            tbody.innerHTML = domains.map(domain => {
+                const daysLeft = Math.ceil((new Date(domain.expiration_date) - new Date()) / (1000 * 60 * 60 * 24));
+                const isExpiringSoon = daysLeft <= 30;
+                const isExpired = daysLeft < 0;
+
+                let statusColor, statusText, statusIcon;
+
+                if (isExpired) {
+                    statusColor = 'text-red-400';
+                    statusText = 'Expired';
+                    statusIcon = 'fas fa-exclamation-triangle';
+                } else if (isExpiringSoon) {
+                    statusColor = 'text-yellow-400';
+                    statusText = 'Expiring Soon';
+                    statusIcon = 'fas fa-clock';
+                } else {
+                    statusColor = 'text-green-400';
+                    statusText = 'Active';
+                    statusIcon = 'fas fa-check-circle';
+                }
+
+                return `
+                    <tr class="hover:bg-slate-700/20 transition-colors duration-200">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-lg flex items-center justify-center mr-3">
+                                    <i class="fas fa-at text-purple-400 text-sm"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium text-white">${domain.name}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                            ${domain.registrar || 'Unknown'}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                            ${new Date(domain.expiration_date).toLocaleDateString()}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 py-1 text-xs font-medium rounded-full ${daysLeft <= 30 ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}">
+                                ${daysLeft} days
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <i class="${statusIcon} ${statusColor} mr-2"></i>
+                                <span class="text-sm ${statusColor}">${statusText}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                            ${domain.auto_renew ? '<i class="fas fa-check text-green-400"></i>' : '<i class="fas fa-times text-red-400"></i>'}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                            <button onclick="deleteDomain(${domain.id})" class="text-red-400 hover:text-red-300 transition-colors duration-200" title="Delete Domain">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateHeaderStats();
+            loadDomainData();
+
+            // Update based on polling interval
+            setInterval(() => {
+                updateHeaderStats();
+                loadDomainData();
+            }, pollingIntervalMs);
+
+            // Add Domain Modal Functionality
+            document.getElementById('add-domain-btn').addEventListener('click', function() {
+                document.getElementById('add-domain-modal').classList.remove('hidden');
+            });
+
+            document.getElementById('cancel-add-domain').addEventListener('click', function() {
+                document.getElementById('add-domain-modal').classList.add('hidden');
+            });
+
+            document.getElementById('add-domain-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const formData = new FormData(this);
+                const domainData = {
+                    name: formData.get('name'),
+                    registrar: formData.get('registrar'),
+                    expiration_date: formData.get('expiration_date'),
+                    auto_renew: formData.get('auto_renew') === 'on',
+                    group: formData.get('group')
+                };
+
+                try {
+                    const response = await fetch('/api/domain-targets', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(domainData)
+                    });
+
+                    if (response.ok) {
+                        document.getElementById('add-domain-modal').classList.add('hidden');
+                        this.reset();
+                        loadDomainData(); // Refresh the data
+                        showNotification('Domain added successfully!', 'success');
+                    } else {
+                        throw new Error('Failed to add domain');
+                    }
+                } catch (error) {
+                    console.error('Error adding domain:', error);
+                    showNotification('Failed to add domain. Please try again.', 'error');
+                }
+            });
+        });
+
+        // Delete domain function
+        async function deleteDomain(domainId) {
+            if (confirm('Are you sure you want to delete this domain? This action cannot be undone.')) {
+                try {
+                    const response = await fetch(`/api/domain-targets/${domainId}`, {
+                        method: 'DELETE'
+                    });
+
+                    if (response.ok) {
+                        loadDomainData(); // Refresh the data
+                        showNotification('Domain deleted successfully!', 'success');
+                    } else {
+                        throw new Error('Failed to delete domain');
+                    }
+                } catch (error) {
+                    console.error('Error deleting domain:', error);
+                    showNotification('Failed to delete domain. Please try again.', 'error');
+                }
+            }
+        }
+
+        function showNotification(message, type) {
+            // Simple notification - you can enhance this
+            alert(message);
+        }
+    </script>
+
+    <!-- Add Domain Modal -->
+    <div id="add-domain-modal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 shadow-2xl w-full max-w-md">
+            <div class="p-6 border-b border-slate-700/50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-plus text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white">Add New Domain</h3>
+                        <p class="text-gray-400 text-sm">Add a domain to monitor expiration dates</p>
+                    </div>
+                </div>
+            </div>
+
+            <form id="add-domain-form" class="p-6 space-y-4">
+                <div>
+                    <label for="domain-name" class="block text-sm font-medium text-gray-300 mb-2">Domain Name</label>
+                    <input type="text" id="domain-name" name="name" required
+                           class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                           placeholder="example.com">
+                </div>
+
+                <div>
+                    <label for="domain-registrar" class="block text-sm font-medium text-gray-300 mb-2">Registrar</label>
+                    <input type="text" id="domain-registrar" name="registrar" required
+                           class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                           placeholder="GoDaddy, Namecheap, etc.">
+                </div>
+
+                <div>
+                    <label for="domain-expiration" class="block text-sm font-medium text-gray-300 mb-2">Expiration Date</label>
+                    <input type="datetime-local" id="domain-expiration" name="expiration_date" required
+                           class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                </div>
+
+                <div>
+                    <label for="domain-group" class="block text-sm font-medium text-gray-300 mb-2">Group (Optional)</label>
+                    <input type="text" id="domain-group" name="group"
+                           class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                           placeholder="Personal, Business, etc.">
+                </div>
+
+                <div class="flex items-center">
+                    <input type="checkbox" id="domain-auto-renew" name="auto_renew"
+                           class="w-4 h-4 text-blue-600 bg-slate-700/50 border-slate-600/50 rounded focus:ring-blue-500 focus:ring-2">
+                    <label for="domain-auto-renew" class="ml-2 text-sm text-gray-300">Auto-renew enabled</label>
+                </div>
+
+                <div class="flex gap-3 pt-4">
+                    <button type="button" id="cancel-add-domain"
+                            class="flex-1 px-4 py-3 bg-slate-700 hover:bg-slate-600 text-gray-300 rounded-lg transition-colors duration-200">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl">
+                        Add Domain
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

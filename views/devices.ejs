@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Device Management - SMon</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-gray-100 min-h-screen">
+  <div class="flex h-screen">
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-gradient-to-br from-slate-800 to-slate-900 p-3 rounded-xl border border-slate-700/50 shadow-xl hover:shadow-2xl hover:border-slate-600/70 transition-all duration-300 group">
+      <i class="fas fa-bars text-white group-hover:scale-110 transition-transform duration-200"></i>
+    </button>
+
+    <!-- Mobile Overlay -->
+    <div id="mobile-overlay" class="md:hidden fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-30 hidden"></div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="w-64 bg-gradient-to-b from-slate-950 to-slate-900 border-r border-slate-700/50 shadow-2xl flex flex-col fixed md:relative inset-y-0 left-0 z-40 transform -translate-x-full md:translate-x-0 transition-all duration-300 ease-in-out">
+      <!-- Header -->
+      <div class="p-6 border-b border-slate-700/50 bg-gradient-to-r from-slate-900/50 to-slate-800/50">
+        <div class="flex items-center gap-3 mb-1">
+          <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 group">
+            <i class="fas fa-chart-line text-white font-bold text-lg group-hover:scale-110 transition-transform duration-200"></i>
+          </div>
+          <div>
+            <h1 class="text-lg font-bold text-white">SMon</h1>
+            <p class="text-xs text-gray-400">SNMP Monitor</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="flex-1 px-4 py-6 overflow-y-auto">
+        <div class="space-y-2">
+          <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-chart-area w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Dashboard</span>
+          </a>
+          <a href="/monitoring" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-gauge-high w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Bandwidth Monitor</span>
+          </a>
+          <a href="/ping" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-network-wired w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Ping Monitor</span>
+          <a href="/websites" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-700 transition-all duration-200">
+            <i class="fas fa-globe w-5"></i>
+            <span>Website Monitor</span>
+          </a>
+          <a href="/domains" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-at w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Domain Monitor</span>
+          </a>
+          <a href="/devices" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium transition-all hover:shadow-lg hover:shadow-blue-500/25 hover:scale-[1.02] group">
+            <i class="fas fa-server w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Devices</span>
+          </a>
+          <a href="/history" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-history w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>History</span>
+          </a>
+          <a href="/status" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-tachometer-alt w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Status</span>
+          </a>
+          <a href="/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-cog w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Settings</span>
+          </a>
+          <a href="/about" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-info-circle w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>About</span>
+          </a>
+          <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-gradient-to-r hover:from-red-500/20 hover:to-red-600/20 hover:text-red-300 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] mt-4 group">
+            <i class="fas fa-sign-out-alt w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </nav>
+
+      <!-- Footer -->
+      <div class="px-4 py-4 border-t border-slate-700/50 bg-gradient-to-r from-slate-900/30 to-slate-800/30">
+        <div class="text-xs text-gray-500 text-center">
+          <p class="font-medium">SNMP Monitor v2.0.1</p>
+          <p class="text-gray-600">Network Intelligence</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 overflow-auto md:ml-0">
+      <!-- Top Header -->
+      <div class="bg-gradient-to-r from-slate-950 to-slate-900 border-b border-slate-700/50 px-4 md:px-8 py-4 sticky top-0 z-20 shadow-xl">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+              <div class="w-8 h-8 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-lg flex items-center justify-center shadow-lg">
+                <i class="fas fa-server text-white text-sm"></i>
+              </div>
+              Device Management
+            </h2>
+            <p class="text-gray-400 text-sm mt-1">Add, configure, and manage SNMP devices</p>
+          </div>
+          
+          <!-- System Stats -->
+          <div class="flex flex-wrap gap-3 text-xs">
+            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-blue-500/40 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 hover:scale-105 group">
+              <div class="w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                <i class="fas fa-microchip text-white text-xs"></i>
+              </div>
+              <div>
+                <p class="text-gray-400 font-medium">CPU</p>
+                <p class="text-white font-semibold" id="header-cpu">--%</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-green-500/40 hover:shadow-lg hover:shadow-green-500/20 transition-all duration-300 hover:scale-105 group">
+              <div class="w-6 h-6 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                <i class="fas fa-memory text-white text-xs"></i>
+              </div>
+              <div>
+                <p class="text-gray-400 font-medium">Memory</p>
+                <p class="text-white font-semibold" id="header-memory">--</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-purple-500/40 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 hover:scale-105 group">
+              <div class="w-6 h-6 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                <i class="fas fa-database text-white text-xs"></i>
+              </div>
+              <div>
+                <p class="text-gray-400 font-medium">Database</p>
+                <p class="text-green-400 font-semibold" id="header-db"><i class="fas fa-circle text-xs"></i> Online</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-orange-500/40 hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-300 hover:scale-105 group">
+              <div class="w-6 h-6 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                <i class="fas fa-hdd text-white text-xs"></i>
+              </div>
+              <div>
+                <p class="text-gray-400 font-medium">Storage</p>
+                <p class="text-white font-semibold" id="header-storage">--</p>
+              </div>
+            </div>
+          </div>
+          
+          <button id="add-device-modal-btn" class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-4 py-2 rounded-xl font-medium transition-all shadow-lg hover:shadow-xl hover:shadow-green-500/25 hover:scale-105 flex items-center gap-2">
+            <i class="fas fa-plus"></i>
+            Add Device
+          </button>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="p-8">
+        <!-- Devices Grid -->
+        <div class="space-y-6">
+          <% if (Object.keys(devices).length === 0) { %>
+            <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-12 text-center shadow-xl hover:shadow-2xl transition-all duration-300">
+              <div class="w-20 h-20 bg-gradient-to-br from-slate-700 to-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-600/30">
+                <i class="fas fa-inbox text-4xl text-gray-400"></i>
+              </div>
+              <p class="text-gray-400 text-lg font-medium">No devices configured yet</p>
+              <p class="text-gray-500 text-sm mt-2">Click "Add Device" to create your first device</p>
+            </div>
+          <% } else { %>
+            <% Object.entries(devices).forEach(([deviceId, device]) => { %>
+              <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:border-slate-600/70">
+                <div class="flex justify-between items-start mb-6">
+                  <div>
+                    <div class="flex items-center gap-3 mb-2">
+                      <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
+                        <i class="fas fa-server text-white text-lg"></i>
+                      </div>
+                      <div>
+                        <h3 class="text-xl font-bold text-white"><%= device.name %></h3>
+                        <p class="text-gray-400 text-sm font-mono"><%= device.host %></p>
+                      </div>
+                    </div>
+                    <div class="flex gap-4 mt-2 text-sm">
+                      <span class="<%= device.enabled ? 'text-green-400' : 'text-gray-500' %>">
+                        <i class="fas fa-circle <%= device.enabled ? 'text-green-500' : 'text-gray-600' %> mr-1"></i>
+                        <%= device.enabled ? 'Enabled' : 'Disabled' %>
+                      </span>
+                      <span class="text-gray-400">Community: <span class="font-mono text-gray-300"><%= device.community %></span></span>
+                      <span class="px-3 py-1 bg-gradient-to-br from-slate-700 to-slate-800 rounded-lg text-xs text-gray-300 border border-slate-600/30">
+                        <i class="fas fa-microchip mr-1"></i><%= device.vendor || 'standard' %>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex gap-2">
+                    <button onclick="openEditModal('<%= deviceId %>')" class="px-4 py-2 bg-gradient-to-r from-blue-600/20 to-blue-700/20 text-blue-400 hover:from-blue-600/40 hover:to-blue-700/40 rounded-xl transition-all duration-300 text-sm hover:shadow-lg hover:scale-105 border border-blue-500/20 hover:border-blue-500/40">
+                      <i class="fas fa-edit mr-2"></i>Edit
+                    </button>
+                    <button onclick="deleteDevice('<%= deviceId %>')" class="px-4 py-2 bg-gradient-to-r from-red-600/20 to-red-700/20 text-red-400 hover:from-red-600/40 hover:to-red-700/40 rounded-xl transition-all duration-300 text-sm hover:shadow-lg hover:scale-105 border border-red-500/20 hover:border-red-500/40">
+                      <i class="fas fa-trash mr-2"></i>Delete
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Interface Selection -->
+                <div class="border-t border-slate-700/50 pt-6">
+                  <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-300 mb-3">Select Interfaces to Monitor:</label>
+                    <div id="interfaces-<%= deviceId %>" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 mb-4">
+                      <p class="text-gray-500 text-sm col-span-full">Loading interfaces...</p>
+                    </div>
+                  </div>
+
+                  <!-- Action Buttons -->
+                  <div class="flex gap-2">
+                    <button onclick="loadInterfaces('<%= deviceId %>')" class="px-4 py-2 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 text-white rounded-xl text-sm transition-all duration-300 hover:shadow-lg hover:scale-105 border border-slate-600/30">
+                      <i class="fas fa-sync-alt mr-2"></i>Refresh
+                    </button>
+                    <button onclick="saveInterfaceSelection('<%= deviceId %>')" class="px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-xl text-sm transition-all duration-300 hover:shadow-lg hover:shadow-green-500/25 hover:scale-105">
+                      <i class="fas fa-check mr-2"></i>Save
+                    </button>
+                  </div>
+
+                  <!-- Current Selection Display -->
+                  <div class="mt-4 p-4 bg-gradient-to-br from-slate-700/50 to-slate-800/50 rounded-xl border border-slate-600/30">
+                    <p class="text-xs text-gray-400 mb-2">Currently Selected:</p>
+                    <div id="selected-<%= deviceId %>" class="text-sm text-gray-300">
+                      <% if (device.selectedInterfaces && device.selectedInterfaces.length > 0) { %>
+                        <span class="inline-block"><%= device.selectedInterfaces.map(iface => typeof iface === 'string' ? iface : iface.name).join(', ') %></span>
+                      <% } else { %>
+                        <span class="text-gray-500">No interfaces selected</span>
+                      <% } %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% }); %>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Device Modal -->
+  <div id="add-device-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50">
+    <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto shadow-2xl">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-2xl font-bold text-white" id="modal-title">Add New Device</h3>
+        <button onclick="closeAddModal()" class="text-gray-400 hover:text-white p-2 rounded-lg hover:bg-slate-700/50 transition-all duration-200 hover:scale-110">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <!-- Step 1: Device Information -->
+      <div id="step-1-form">
+        <form id="add-device-form" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Device ID</label>
+            <input type="text" name="id" placeholder="e.g., router3" class="w-full bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600/50 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-slate-500/70" required>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Device Name</label>
+            <input type="text" name="name" placeholder="e.g., Main Router" class="w-full bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600/50 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-slate-500/70" required>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Host/IP Address</label>
+            <input type="text" name="host" placeholder="192.168.1.1" class="w-full bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600/50 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-slate-500/70" required>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">SNMP Community</label>
+            <input type="text" name="community" placeholder="public" value="public" class="w-full bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600/50 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-slate-500/70" required>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Device Vendor</label>
+            <select name="vendor" class="w-full bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-slate-500/70">
+              <option value="auto">Auto-detect</option>
+              <option value="standard">Standard MIB-II</option>
+              <option value="cisco">Cisco</option>
+              <option value="huawei">Huawei</option>
+              <option value="mikrotik">Mikrotik</option>
+              <option value="juniper">Juniper</option>
+              <option value="hp">HP/Aruba</option>
+            </select>
+            <p class="text-xs text-gray-400 mt-1">Select vendor for optimized OID usage, or choose auto-detect</p>
+          </div>
+          <div class="flex gap-3 mt-6">
+            <button type="button" id="next-step-btn" class="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl transition-all duration-300 font-medium hover:shadow-lg hover:shadow-blue-500/25 hover:scale-[1.02] flex items-center justify-center gap-2">
+              <span>Next: Select Interfaces</span>
+              <i class="fas fa-arrow-right"></i>
+            </button>
+            <button type="button" onclick="closeAddModal()" class="flex-1 px-4 py-3 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 text-white rounded-xl transition-all duration-300 font-medium hover:shadow-lg hover:scale-[1.02] border border-slate-600/30">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Step 2: Interface Selection -->
+      <div id="step-2-interfaces" class="hidden">
+        <div class="mb-6">
+          <h4 class="text-lg font-semibold text-white mb-2">Select Interfaces to Graph</h4>
+          <p class="text-gray-400 text-sm">Choose which interfaces you want to monitor and graph</p>
+        </div>
+
+        <div id="interfaces-loading" class="text-center py-8">
+          <div class="inline-flex items-center gap-2 text-gray-400">
+            <i class="fas fa-spinner fa-spin"></i>
+            <span>Discovering interfaces via SNMP walk...</span>
+          </div>
+        </div>
+
+        <div id="interfaces-list" class="hidden grid grid-cols-1 md:grid-cols-2 gap-2 mb-6">
+          <!-- Will be populated by JavaScript -->
+        </div>
+
+        <div id="interfaces-error" class="hidden bg-red-900/30 border border-red-600 rounded-lg p-4 mb-6">
+          <p class="text-red-400 flex items-center gap-2">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="error-message"></span>
+          </p>
+        </div>
+
+        <div class="flex gap-3 mt-6">
+          <button type="button" id="back-step-btn" class="flex-1 px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-all font-medium flex items-center justify-center gap-2">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back</span>
+          </button>
+          <button type="button" id="save-device-btn" class="flex-1 px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-500 hover:to-green-600 transition-all font-medium flex items-center justify-center gap-2">
+            <i class="fas fa-check"></i>
+            <span>Add Device</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Device Modal -->
+  <div id="edit-device-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="bg-slate-800 rounded-lg border border-slate-700 p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-2xl font-bold text-white" id="edit-modal-title">Edit Device</h3>
+        <button onclick="closeEditModal()" class="text-gray-400 hover:text-white text-2xl">×</button>
+      </div>
+
+      <!-- Step 1: Device Information -->
+      <div id="edit-step-1-form">
+        <form id="edit-device-form" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Device ID</label>
+            <input type="text" name="id" class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" disabled>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Device Name</label>
+            <input type="text" name="name" placeholder="e.g., Main Router" class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Host/IP Address</label>
+            <input type="text" name="host" placeholder="192.168.1.1" class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">SNMP Community</label>
+            <input type="text" name="community" placeholder="public" class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+          </div>
+          <div class="flex gap-3 mt-6">
+            <button type="button" id="edit-next-step-btn" class="flex-1 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-500 hover:to-blue-600 transition-all font-medium flex items-center justify-center gap-2">
+              <span>Next: Update Interfaces</span>
+              <i class="fas fa-arrow-right"></i>
+            </button>
+            <button type="button" onclick="closeEditModal()" class="flex-1 px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-all font-medium">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Step 2: Interface Selection -->
+      <div id="edit-step-2-interfaces" class="hidden">
+        <div class="mb-6">
+          <h4 class="text-lg font-semibold text-white mb-2">Update Interfaces to Graph</h4>
+          <p class="text-gray-400 text-sm">Choose which interfaces you want to monitor and graph</p>
+        </div>
+
+        <div id="edit-interfaces-loading" class="text-center py-8">
+          <div class="inline-flex items-center gap-2 text-gray-400">
+            <i class="fas fa-spinner fa-spin"></i>
+            <span>Discovering interfaces via SNMP walk...</span>
+          </div>
+        </div>
+
+        <div id="edit-interfaces-list" class="hidden grid grid-cols-1 md:grid-cols-2 gap-2 mb-6">
+          <!-- Will be populated by JavaScript -->
+        </div>
+
+        <div id="edit-interfaces-error" class="hidden bg-red-900/30 border border-red-600 rounded-lg p-4 mb-6">
+          <p class="text-red-400 flex items-center gap-2">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="edit-error-message"></span>
+          </p>
+        </div>
+
+        <div class="flex gap-3 mt-6">
+          <button type="button" id="edit-back-step-btn" class="flex-1 px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-all font-medium flex items-center justify-center gap-2">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back</span>
+          </button>
+          <button type="button" id="update-device-btn" class="flex-1 px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-500 hover:to-green-600 transition-all font-medium flex items-center justify-center gap-2">
+            <i class="fas fa-check"></i>
+            <span>Update Device</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+  <script>
+    // Toast notification system
+    function showToast(message, type = 'info', duration = 3000) {
+      const toastContainer = document.getElementById('toast-container');
+
+      const toast = document.createElement('div');
+      toast.className = `flex items-center p-4 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full max-w-sm`;
+
+      let iconClass = '';
+      let bgColor = '';
+
+      switch(type) {
+        case 'success':
+          iconClass = 'fas fa-check-circle';
+          bgColor = 'bg-green-500';
+          break;
+        case 'error':
+          iconClass = 'fas fa-exclamation-circle';
+          bgColor = 'bg-red-500';
+          break;
+        case 'warning':
+          iconClass = 'fas fa-exclamation-triangle';
+          bgColor = 'bg-yellow-500';
+          break;
+        default:
+          iconClass = 'fas fa-info-circle';
+          bgColor = 'bg-blue-500';
+      }
+
+      toast.classList.add(bgColor, 'text-white');
+
+      toast.innerHTML = `
+        <i class="${iconClass} mr-3"></i>
+        <span class="flex-1">${message}</span>
+        <button onclick="this.parentElement.remove()" class="ml-3 hover:opacity-75">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+
+      toastContainer.appendChild(toast);
+
+      // Animate in
+      setTimeout(() => {
+        toast.classList.remove('translate-x-full');
+      }, 10);
+
+      // Auto remove
+      setTimeout(() => {
+        toast.classList.add('translate-x-full');
+        setTimeout(() => {
+          if (toast.parentElement) {
+            toast.remove();
+          }
+        }, 300);
+      }, duration);
+    }
+
+    const devices = <%- JSON.stringify(devices) %>;
+    let currentDeviceData = null;
+
+    function closeAddModal() {
+      document.getElementById('add-device-modal').classList.add('hidden');
+      // Reset to step 1
+      resetAddDeviceModal();
+    }
+
+    function resetAddDeviceModal() {
+      document.getElementById('step-1-form').classList.remove('hidden');
+      document.getElementById('step-2-interfaces').classList.add('hidden');
+      document.getElementById('add-device-form').reset();
+      document.getElementById('modal-title').textContent = 'Add New Device';
+      currentDeviceData = null;
+    }
+
+    let editingDeviceId = null;
+    let editDeviceData = null;
+
+    function openEditModal(deviceId) {
+      editingDeviceId = deviceId;
+      const device = devices[deviceId];
+      if (!device) return;
+
+      // Populate form with device data
+      document.querySelector('#edit-device-form input[name="id"]').value = deviceId;
+      document.querySelector('#edit-device-form input[name="name"]').value = device.name;
+      document.querySelector('#edit-device-form input[name="host"]').value = device.host;
+      document.querySelector('#edit-device-form input[name="community"]').value = device.community;
+
+      editDeviceData = { ...device };
+
+      document.getElementById('edit-device-modal').classList.remove('hidden');
+      document.getElementById('edit-step-1-form').classList.remove('hidden');
+      document.getElementById('edit-step-2-interfaces').classList.add('hidden');
+      document.getElementById('edit-modal-title').textContent = `Edit Device: ${device.name}`;
+    }
+
+    function closeEditModal() {
+      document.getElementById('edit-device-modal').classList.add('hidden');
+      resetEditDeviceModal();
+    }
+
+    function resetEditDeviceModal() {
+      document.getElementById('edit-step-1-form').classList.remove('hidden');
+      document.getElementById('edit-step-2-interfaces').classList.add('hidden');
+      document.getElementById('edit-device-form').reset();
+      document.getElementById('edit-modal-title').textContent = 'Edit Device';
+      editingDeviceId = null;
+      editDeviceData = null;
+    }
+
+    document.getElementById('add-device-modal-btn').addEventListener('click', () => {
+      resetAddDeviceModal();
+      document.getElementById('add-device-modal').classList.remove('hidden');
+    });
+
+    document.getElementById('add-device-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'add-device-modal') closeAddModal();
+    });
+
+    document.getElementById('edit-device-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'edit-device-modal') closeEditModal();
+    });
+
+    // Edit Modal - Step 1: Next button - Do SNMP walk
+    document.getElementById('edit-next-step-btn').addEventListener('click', async function() {
+      const formData = new FormData(document.getElementById('edit-device-form'));
+      const deviceId = formData.get('id');
+      const name = formData.get('name');
+      const host = formData.get('host');
+      const community = formData.get('community');
+      
+      // Validate form
+      if (!name || !host || !community) {
+        showToast('Please fill in all fields', 'warning');
+        return;
+      }
+
+      // Disable button and show loading
+      this.disabled = true;
+      this.textContent = '⏳ Discovering interfaces...';
+
+      try {
+        // Call API to get interfaces from device via SNMP walk
+        const response = await fetch('/api/discover-interfaces', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            host: host,
+            community: community
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to discover interfaces');
+        }
+
+        const data = await response.json();
+        const interfaces = data.interfaces || [];
+
+        // Display interfaces in step 2
+        displayEditInterfaceSelection(interfaces);
+
+        // Move to step 2
+        document.getElementById('edit-step-1-form').classList.add('hidden');
+        document.getElementById('edit-step-2-interfaces').classList.remove('hidden');
+        document.getElementById('edit-modal-title').textContent = 'Update Interfaces to Graph';
+
+      } catch (err) {
+        console.error('Error discovering interfaces:', err);
+        showToast('Failed to discover interfaces. Please check the host IP and SNMP community.', 'error');
+      } finally {
+        this.disabled = false;
+        this.textContent = '➜ Next: Update Interfaces';
+      }
+    });
+
+    function displayEditInterfaceSelection(interfaces) {
+      const container = document.getElementById('edit-interfaces-list');
+      const loadingDiv = document.getElementById('edit-interfaces-loading');
+      const errorDiv = document.getElementById('edit-interfaces-error');
+
+      if (interfaces.length === 0) {
+        errorDiv.classList.remove('hidden');
+        document.getElementById('edit-error-message').textContent = 'No interfaces found. Check SNMP settings.';
+        container.classList.add('hidden');
+        return;
+      }
+
+      errorDiv.classList.add('hidden');
+      container.classList.remove('hidden');
+      loadingDiv.classList.add('hidden');
+
+      const currentSelected = editDeviceData.selectedInterfaces || [];
+      // Support both old format (array of strings) and new format (array of {index, name})
+      const currentSelectedNames = currentSelected.map(i => typeof i === 'string' ? i : i.name);
+      const discoveredNames = interfaces.map(i => i.name);
+      
+      // Find interfaces that were previously selected but no longer discovered
+      const missingInterfaces = currentSelectedNames.filter(name => !discoveredNames.includes(name));
+
+      let html = '';
+      
+      // First, show discovered interfaces
+      interfaces.forEach(iface => {
+        // Check: currently selected OR matches pattern (ether/vlan)
+        const isChecked = currentSelectedNames.includes(iface.name) || 
+                         iface.name.includes('ether') || 
+                         iface.name.includes('vlan');
+        html += `
+          <label class="flex items-center gap-2 p-3 bg-slate-700 rounded-lg hover:bg-slate-600 transition-all cursor-pointer group">
+            <input type="checkbox" 
+                   name="interface-edit-select" 
+                   value="${iface.name}"
+                   data-index="${iface.index}"
+                   class="w-4 h-4 rounded accent-blue-500"
+                   ${isChecked ? 'checked' : ''}>
+            <span class="text-sm text-gray-300 group-hover:text-white">
+              <i class="fas fa-link text-blue-400 mr-1"></i>${iface.name}
+            </span>
+          </label>
+        `;
+      });
+      
+      // Then, show missing interfaces (for reference, but unchecked with strikethrough)
+      if (missingInterfaces.length > 0) {
+        html += '<div class="col-span-full mt-4 pt-4 border-t border-slate-600">';
+        html += '<p class="text-xs text-yellow-400 mb-2"><i class="fas fa-info-circle mr-1"></i>Previously selected but no longer discovered:</p>';
+        missingInterfaces.forEach(name => {
+          html += `
+            <div class="flex items-center gap-2 p-3 bg-slate-700/50 rounded-lg opacity-50 group">
+              <i class="fas fa-unlink text-red-400 mr-1"></i>
+              <span class="text-sm text-gray-400 line-through">${name}</span>
+              <span class="text-xs text-gray-500">(disconnected)</span>
+            </div>
+          `;
+        });
+        html += '</div>';
+      }
+      
+      container.innerHTML = html;
+    }
+
+    // Edit Modal - Step 2: Back button
+    document.getElementById('edit-back-step-btn').addEventListener('click', function() {
+      document.getElementById('edit-step-1-form').classList.remove('hidden');
+      document.getElementById('edit-step-2-interfaces').classList.add('hidden');
+      document.getElementById('edit-modal-title').textContent = `Edit Device: ${editDeviceData.name}`;
+    });
+
+    // Edit Modal - Step 2: Update device button
+    document.getElementById('update-device-btn').addEventListener('click', async function() {
+      const checkboxes = document.querySelectorAll('input[name="interface-edit-select"]:checked');
+      const selectedInterfaces = Array.from(checkboxes).map(cb => ({
+        index: parseInt(cb.getAttribute('data-index')),
+        name: cb.value
+      }));
+
+      if (selectedInterfaces.length === 0) {
+        showToast('Please select at least one interface', 'warning');
+        return;
+      }
+
+      const nameInput = document.querySelector('#edit-device-form input[name="name"]');
+      const hostInput = document.querySelector('#edit-device-form input[name="host"]');
+      const communityInput = document.querySelector('#edit-device-form input[name="community"]');
+
+      const updateData = {
+        name: nameInput.value,
+        host: hostInput.value,
+        community: communityInput.value,
+        selectedInterfaces: selectedInterfaces,
+        enabled: editDeviceData.enabled
+      };
+
+      this.disabled = true;
+      this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating device...';
+
+      try {
+        const response = await fetch(`/api/devices/${editingDeviceId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updateData)
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to update device');
+        }
+
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg';
+        notification.textContent = '✓ Device updated successfully with ' + selectedInterfaces.length + ' interfaces';
+        document.body.appendChild(notification);
+        
+        setTimeout(() => location.reload(), 1500);
+      } catch (err) {
+        console.error('Error updating device:', err);
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg';
+        notification.textContent = '✗ Failed to update device';
+        document.body.appendChild(notification);
+        
+        this.disabled = false;
+        this.innerHTML = '<i class="fas fa-check"></i> <span>Update Device</span>';
+      }
+    });
+
+    // Step 1: Next button - Do SNMP walk
+    document.getElementById('next-step-btn').addEventListener('click', async function() {
+      const formData = new FormData(document.getElementById('add-device-form'));
+      currentDeviceData = Object.fromEntries(formData);
+      
+      // Validate form
+      if (!currentDeviceData.id || !currentDeviceData.name || !currentDeviceData.host || !currentDeviceData.community) {
+        showToast('Please fill in all fields', 'warning');
+        return;
+      }
+
+      // Handle vendor selection
+      if (currentDeviceData.vendor === 'auto') {
+        currentDeviceData.vendor = 'standard'; // Will be auto-detected during discovery
+      }
+
+      // Disable button and show loading
+      this.disabled = true;
+      this.textContent = '⏳ Discovering interfaces...';
+
+      try {
+        // Call API to get interfaces from device via SNMP walk
+        const response = await fetch('/api/discover-interfaces', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            host: currentDeviceData.host,
+            community: currentDeviceData.community
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to discover interfaces');
+        }
+
+        const data = await response.json();
+        const interfaces = data.interfaces || [];
+        const detectedVendor = data.vendor || 'standard';
+
+        // Update vendor if auto-detected
+        if (currentDeviceData.vendor === 'standard' && detectedVendor !== 'standard') {
+          currentDeviceData.vendor = detectedVendor;
+          showToast(`Vendor auto-detected: ${detectedVendor}`, 'info');
+        }
+
+        // Display interfaces in step 2
+        displayInterfaceSelection(interfaces);
+
+        // Move to step 2
+        document.getElementById('step-1-form').classList.add('hidden');
+        document.getElementById('step-2-interfaces').classList.remove('hidden');
+        document.getElementById('modal-title').textContent = 'Select Interfaces to Graph';
+
+      } catch (err) {
+        console.error('Error discovering interfaces:', err);
+        showToast('Failed to discover interfaces. Please check the host IP and SNMP community.', 'error');
+      } finally {
+        this.disabled = false;
+        this.textContent = '➜ Next: Select Interfaces';
+      }
+    });
+
+    function displayInterfaceSelection(interfaces) {
+      const container = document.getElementById('interfaces-list');
+      const loadingDiv = document.getElementById('interfaces-loading');
+      const errorDiv = document.getElementById('interfaces-error');
+
+      if (interfaces.length === 0) {
+        errorDiv.classList.remove('hidden');
+        document.getElementById('error-message').textContent = 'No interfaces found. Check SNMP settings.';
+        container.classList.add('hidden');
+        return;
+      }
+
+      errorDiv.classList.add('hidden');
+      container.classList.remove('hidden');
+      loadingDiv.classList.add('hidden');
+
+      let html = '';
+      interfaces.forEach(iface => {
+        html += `
+          <label class="flex items-center gap-2 p-3 bg-slate-700 rounded-lg hover:bg-slate-600 transition-all cursor-pointer group">
+            <input type="checkbox" 
+                   name="interface-select" 
+                   value="${iface.name}"
+                   data-index="${iface.index}"
+                   class="w-4 h-4 rounded accent-blue-500"
+                   ${iface.name.includes('ether') || iface.name.includes('vlan') ? 'checked' : ''}>
+            <span class="text-sm text-gray-300 group-hover:text-white">
+              <i class="fas fa-link text-blue-400 mr-1"></i>${iface.name}
+            </span>
+          </label>
+        `;
+      });
+      
+      container.innerHTML = html;
+    }
+
+    // Step 2: Back button
+    document.getElementById('back-step-btn').addEventListener('click', function() {
+      document.getElementById('step-1-form').classList.remove('hidden');
+      document.getElementById('step-2-interfaces').classList.add('hidden');
+      document.getElementById('modal-title').textContent = 'Add New Device';
+    });
+
+    // Step 2: Save device button
+    document.getElementById('save-device-btn').addEventListener('click', async function() {
+      const checkboxes = document.querySelectorAll('input[name="interface-select"]:checked');
+      const selectedInterfaces = Array.from(checkboxes).map(cb => ({
+        index: parseInt(cb.getAttribute('data-index')),
+        name: cb.value
+      }));
+
+      if (selectedInterfaces.length === 0) {
+        showToast('Please select at least one interface', 'warning');
+        return;
+      }
+
+      // Add selected interfaces to device data
+      currentDeviceData.selectedInterfaces = selectedInterfaces;
+      currentDeviceData.enabled = true;
+
+      this.disabled = true;
+      this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding device...';
+
+      try {
+        const response = await fetch('/api/devices', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(currentDeviceData)
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to add device');
+        }
+
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg';
+        notification.textContent = '✓ Device added successfully with ' + selectedInterfaces.length + ' interfaces';
+        document.body.appendChild(notification);
+        
+        setTimeout(() => location.reload(), 1500);
+      } catch (err) {
+        console.error('Error adding device:', err);
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg';
+        notification.textContent = '✗ Failed to add device';
+        document.body.appendChild(notification);
+        
+        this.disabled = false;
+        this.innerHTML = '<i class="fas fa-check"></i> <span>Add Device</span>';
+      }
+    });
+
+    function loadInterfaces(deviceId) {
+      const container = document.getElementById(`interfaces-${deviceId}`);
+      container.innerHTML = '<p class="text-gray-500 text-sm col-span-full">Loading interfaces...</p>';
+      
+      const device = devices[deviceId];
+      
+      fetch('/api/discover-interfaces', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          host: device.host,
+          community: device.community
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          const interfaces = data.interfaces || [];
+          
+          if (interfaces.length === 0) {
+            container.innerHTML = '<p class="text-gray-500 text-sm col-span-full">No interfaces found</p>';
+            return;
+          }
+          
+          const selectedInterfaces = device.selectedInterfaces || [];
+          
+          let html = '';
+          interfaces.forEach(iface => {
+            // Check if interface is selected (support both old string format and new object format)
+            const isChecked = selectedInterfaces.some(selected => 
+              typeof selected === 'string' ? selected === iface.name : selected.name === iface.name
+            );
+            html += `
+              <label class="flex items-center gap-2 p-3 bg-slate-700 rounded-lg hover:bg-slate-600 transition-all cursor-pointer group">
+                <input type="checkbox" 
+                       name="interface-${deviceId}" 
+                       value="${iface.name}" 
+                       data-index="${iface.index}"
+                       ${isChecked ? 'checked' : ''}
+                       class="w-4 h-4 rounded accent-blue-500">
+                <span class="text-sm text-gray-300 group-hover:text-white">${iface.name}</span>
+              </label>
+            `;
+          });
+          
+          container.innerHTML = html;
+        })
+        .catch(err => {
+          console.error('Error loading interfaces:', err);
+          container.innerHTML = '<p class="text-red-400 text-sm col-span-full">Error loading interfaces</p>';
+        });
+    }
+
+    function saveInterfaceSelection(deviceId) {
+      const checkboxes = document.querySelectorAll(`input[name="interface-${deviceId}"]:checked`);
+      const selectedInterfaces = Array.from(checkboxes).map(cb => ({
+        index: parseInt(cb.getAttribute('data-index')),
+        name: cb.value
+      }));
+      
+      fetch(`/api/devices/${deviceId}/select-interfaces`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ selectedInterfaces })
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Update the displayed selected interfaces
+          const selectedNames = selectedInterfaces.map(iface => iface.name);
+          document.getElementById(`selected-${deviceId}`).innerHTML = 
+            selectedNames.length > 0 
+              ? `<span class="inline-block">${selectedNames.join(', ')}</span>`
+              : '<span class="text-gray-500">No interfaces selected</span>';
+          
+          // Update the devices object
+          devices[deviceId].selectedInterfaces = selectedInterfaces;
+          
+          const notification = document.createElement('div');
+          notification.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg';
+          notification.textContent = '✓ Interfaces saved successfully';
+          document.body.appendChild(notification);
+          setTimeout(() => notification.remove(), 3000);
+        })
+        .catch(err => {
+          console.error('Error saving interfaces:', err);
+          const notification = document.createElement('div');
+          notification.className = 'fixed top-4 right-4 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg';
+          notification.textContent = '✗ Failed to save interfaces';
+          document.body.appendChild(notification);
+          setTimeout(() => notification.remove(), 3000);
+        });
+    }
+
+    function deleteDevice(deviceId) {
+      if (!confirm(`Are you sure you want to delete this device?`)) return;
+      
+      fetch(`/api/devices/${deviceId}`, { method: 'DELETE' })
+        .then(response => response.json())
+        .then(data => {
+          const notification = document.createElement('div');
+          notification.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg';
+          notification.textContent = '✓ Device deleted successfully';
+          document.body.appendChild(notification);
+          setTimeout(() => location.reload(), 1500);
+        })
+        .catch(err => {
+          console.error('Error deleting device:', err);
+          const notification = document.createElement('div');
+          notification.className = 'fixed top-4 right-4 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg';
+          notification.textContent = '✗ Failed to delete device';
+          document.body.appendChild(notification);
+          setTimeout(() => notification.remove(), 3000);
+        });
+    }
+
+    // Remove the form submit handler since we use the button click handler instead
+    // document.getElementById('add-device-form').addEventListener('submit', function(e) {
+    //   e.preventDefault();
+    //   
+    //   const formData = new FormData(this);
+    //   const data = Object.fromEntries(formData);
+    //   
+    //   fetch('/api/devices', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify(data)
+    //   })
+    //     .then(response => response.json())
+    //     .then(device => {
+    //       const notification = document.createElement('div');
+    //       notification.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg';
+    //       notification.textContent = '✓ Device added successfully';
+    //       document.body.appendChild(notification);
+    //       setTimeout(() => location.reload(), 1500);
+    //     })
+    //     .catch(err => {
+    //       console.error('Error adding device:', err);
+    //       const notification = document.createElement('div');
+    //       notification.className = 'fixed top-4 right-4 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg';
+    //       notification.textContent = '✗ Failed to add device';
+    //       document.body.appendChild(notification);
+    //       setTimeout(() => notification.remove(), 3000);
+    //     });
+    // });
+
+    // Load interfaces for all devices on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const sidebar = document.getElementById('sidebar');
+      const mobileOverlay = document.getElementById('mobile-overlay');
+
+      // Mobile menu toggle
+      mobileMenuButton.addEventListener('click', function() {
+        sidebar.classList.toggle('-translate-x-full');
+        mobileOverlay.classList.toggle('hidden');
+      });
+
+      // Close sidebar when clicking overlay
+      mobileOverlay.addEventListener('click', function() {
+        sidebar.classList.add('-translate-x-full');
+        mobileOverlay.classList.add('hidden');
+      });
+
+      Object.keys(devices).forEach(deviceId => {
+        loadInterfaces(deviceId);
+      });
+    });
+
+    // Update header system stats
+    function updateHeaderStats() {
+      fetch('/api/system-info')
+        .then(response => response.json())
+        .then(data => {
+          if (document.getElementById('header-cpu')) {
+            document.getElementById('header-cpu').textContent = data.cpuUsage + '%';
+          }
+          if (document.getElementById('header-memory')) {
+            const memUsedGB = (data.memory.used / 1024 / 1024 / 1024).toFixed(1);
+            const memTotalGB = (data.memory.total / 1024 / 1024 / 1024).toFixed(1);
+            document.getElementById('header-memory').textContent = `${memUsedGB}/${memTotalGB}GB`;
+          }
+          if (document.getElementById('header-storage') && data.storage) {
+            const storageUsedGB = (data.storage.used / 1024 / 1024 / 1024).toFixed(1);
+            const storageTotalGB = (data.storage.total / 1024 / 1024 / 1024).toFixed(1);
+            document.getElementById('header-storage').textContent = `${storageUsedGB}/${storageTotalGB}GB`;
+          }
+        })
+        .catch(err => console.error('Error fetching system info:', err));
+    }
+
+    // Initial update and periodic refresh
+    updateHeaderStats();
+    setInterval(updateHeaderStats, 10000); // Update every 10 seconds
+  </script>
+</body>
+</html>

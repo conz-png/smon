@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bandwidth Monitoring - SMon</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1/dist/chartjs-adapter-luxon.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-gray-100 min-h-screen">
+  <div class="flex h-screen">
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-gradient-to-br from-slate-800 to-slate-900 p-3 rounded-xl border border-slate-700/50 shadow-xl hover:shadow-2xl hover:border-slate-600/70 transition-all duration-300 group">
+      <i class="fas fa-bars text-white group-hover:scale-110 transition-transform duration-200"></i>
+    </button>
+
+    <!-- Mobile Overlay -->
+    <div id="mobile-overlay" class="md:hidden fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-30 hidden"></div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="w-64 bg-gradient-to-b from-slate-950 to-slate-900 border-r border-slate-700/50 shadow-2xl flex flex-col fixed md:relative inset-y-0 left-0 z-40 transform -translate-x-full md:translate-x-0 transition-all duration-300 ease-in-out">
+      <!-- Header -->
+      <div class="p-6 border-b border-slate-700/50 bg-gradient-to-r from-slate-900/50 to-slate-800/50">
+        <div class="flex items-center gap-3 mb-1">
+          <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 group">
+            <i class="fas fa-chart-line text-white font-bold text-lg group-hover:scale-110 transition-transform duration-200"></i>
+          </div>
+          <div>
+            <h1 class="text-lg font-bold text-white">SMon</h1>
+            <p class="text-xs text-gray-400">SNMP Monitor</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="flex-1 px-4 py-6 overflow-y-auto">
+        <div class="space-y-2">
+          <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-chart-area w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Dashboard</span>
+          </a>
+          <a href="/monitoring" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium transition-all hover:shadow-lg hover:shadow-blue-500/25 hover:scale-[1.02] group">
+            <i class="fas fa-gauge-high w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Bandwidth Monitor</span>
+          </a>
+          <a href="/ping" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-network-wired w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Ping Monitor</span>
+          <a href="/websites" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-700 transition-all duration-200">
+            <i class="fas fa-globe w-5"></i>
+            <span>Website Monitor</span>
+          </a>
+          <a href="/domains" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-at w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Domain Monitor</span>
+          </a>
+          <a href="/devices" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-server w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Devices</span>
+          </a>
+          <a href="/history" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-history w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>History</span>
+          </a>
+          <a href="/status" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-tachometer-alt w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Status</span>
+          </a>
+          <a href="/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-cog w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Settings</span>
+          </a>
+          <a href="/about" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-info-circle w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>About</span>
+          </a>
+          <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-gradient-to-r hover:from-red-500/20 hover:to-red-600/20 hover:text-red-300 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] mt-4 group">
+            <i class="fas fa-sign-out-alt w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </nav>
+
+      <!-- Footer -->
+      <div class="px-4 py-4 border-t border-slate-700/50 bg-gradient-to-r from-slate-900/30 to-slate-800/30">
+        <div class="text-xs text-gray-500 text-center">
+          <p class="font-medium">SNMP Monitor v2.0.1</p>
+          <p class="text-gray-600">Network Intelligence</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 overflow-auto md:ml-0">
+      <!-- Top Header -->
+      <div class="bg-gradient-to-r from-slate-950 to-slate-900 border-b border-slate-700/50 px-4 md:px-8 py-4 sticky top-0 z-20 shadow-xl">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+              <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
+                <i class="fas fa-chart-line text-white text-sm"></i>
+              </div>
+              Bandwidth Monitoring
+            </h2>
+            <p class="text-gray-400 text-sm mt-1">Real-time Interface Performance & Analysis</p>
+          </div>
+          
+          <!-- System Stats -->
+          <div class="flex flex-wrap gap-3 text-xs">
+            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-blue-500/40 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 hover:scale-105 group">
+              <div class="w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                <i class="fas fa-microchip text-white text-xs"></i>
+              </div>
+              <div>
+                <p class="text-gray-400 font-medium">CPU</p>
+                <p class="text-white font-semibold" id="header-cpu">--%</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-green-500/40 hover:shadow-lg hover:shadow-green-500/20 transition-all duration-300 hover:scale-105 group">
+              <div class="w-6 h-6 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                <i class="fas fa-memory text-white text-xs"></i>
+              </div>
+              <div>
+                <p class="text-gray-400 font-medium">Memory</p>
+                <p class="text-white font-semibold" id="header-memory">--</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-purple-500/40 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 hover:scale-105 group">
+              <div class="w-6 h-6 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                <i class="fas fa-database text-white text-xs"></i>
+              </div>
+              <div>
+                <p class="text-gray-400 font-medium">Database</p>
+                <p class="text-green-400 font-semibold" id="header-db"><i class="fas fa-circle text-xs"></i> Online</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-orange-500/40 hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-300 hover:scale-105 group">
+              <div class="w-6 h-6 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                <i class="fas fa-hdd text-white text-xs"></i>
+              </div>
+              <div>
+                <p class="text-gray-400 font-medium">Storage</p>
+                <p class="text-white font-semibold" id="header-storage">--</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="p-8">
+        <!-- Filter Controls -->
+        <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-6 mb-8 shadow-xl hover:shadow-2xl transition-all duration-300">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <!-- Device Selector -->
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-300 flex items-center gap-2">
+                <div class="p-1 bg-gradient-to-br from-blue-500 to-blue-600 rounded">
+                  <i class="fas fa-server text-white text-xs"></i>
+                </div>
+                Select Device
+              </label>
+              <select id="device-selector" class="w-full bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600/50 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-slate-500/70">
+                <% if (Object.keys(devices).length === 0) { %>
+                  <option value="" disabled selected style="background-color: rgb(51 65 85); color: white;">No devices configured</option>
+                <% } else { %>
+                  <option value="" style="background-color: rgb(51 65 85); color: white;">Choose a device...</option>
+                  <% Object.entries(devices).forEach(([key, device]) => { %>
+                    <option value="<%= key %>" <%= key === selectedDevice ? 'selected' : '' %> style="background-color: rgb(51 65 85); color: white;">
+                      <%= device.name %>
+                    </option>
+                  <% }); %>
+                <% } %>
+              </select>
+            </div>
+
+            <!-- Interface Selector -->
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-300 flex items-center gap-2">
+                <div class="p-1 bg-gradient-to-br from-green-500 to-green-600 rounded">
+                  <i class="fas fa-network-wired text-white text-xs"></i>
+                </div>
+                Select Interface
+              </label>
+              <select id="interface-selector" class="w-full bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600/50 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 hover:border-slate-500/70 <%= Object.keys(devices).length === 0 ? 'disabled opacity-50' : '' %>">
+                <option value="all" style="background-color: rgb(51 65 85); color: white;">All Selected Interfaces</option>
+              </select>
+            </div>
+
+            <!-- Time Range Selector -->
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-300 flex items-center gap-2">
+                <div class="p-1 bg-gradient-to-br from-purple-500 to-purple-600 rounded">
+                  <i class="fas fa-calendar-alt text-white text-xs"></i>
+                </div>
+                Time Range
+              </label>
+              <select id="time-range-selector" class="w-full bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600/50 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 hover:border-slate-500/70 <%= Object.keys(devices).length === 0 ? 'disabled opacity-50' : '' %>">
+                <option value="-1h" selected style="background-color: rgb(51 65 85); color: white;">Last 1 Hour</option>
+                <option value="-24h" style="background-color: rgb(51 65 85); color: white;">Last 24 Hours</option>
+                <option value="-7d" style="background-color: rgb(51 65 85); color: white;">Last 7 Days</option>
+                <option value="-30d" style="background-color: rgb(51 65 85); color: white;">Last 30 Days</option>
+                <option value="custom" style="background-color: rgb(51 65 85); color: white;">Custom Range</option>
+              </select>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-300 opacity-0">Actions</label>
+              <div class="flex items-end gap-3">
+                <button onclick="loadChartData()" class="<%= Object.keys(devices).length === 0 ? 'opacity-50 cursor-not-allowed' : '' %> flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-blue-500/25 hover:-translate-y-0.5 <%= Object.keys(devices).length === 0 ? 'disabled' : '' %>">
+                  <i class="fas fa-sync-alt"></i>
+                  <span>Load Data</span>
+                </button>
+                <button onclick="generatePDFReport()" class="<%= Object.keys(devices).length === 0 ? 'opacity-50 cursor-not-allowed' : '' %> flex-1 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-purple-500/25 hover:-translate-y-0.5 <%= Object.keys(devices).length === 0 ? 'disabled' : '' %>">
+                  <i class="fas fa-file-pdf"></i>
+                  <span>PDF Report</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Custom Date Range (Hidden by default) -->
+          <div id="custom-date-from" class="hidden mt-6 pt-6 border-t border-slate-600/50">
+            <label class="block text-sm font-medium text-gray-300 mb-3 flex items-center gap-2">
+              <i class="fas fa-calendar-plus text-blue-400"></i>
+              From Date:
+            </label>
+            <input type="datetime-local" id="date-from-input" class="w-full bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600/50 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-slate-500/70">
+          </div>
+
+          <div id="custom-date-to" class="hidden mt-4">
+            <label class="block text-sm font-medium text-gray-300 mb-3 flex items-center gap-2">
+              <i class="fas fa-calendar-check text-blue-400"></i>
+              To Date:
+            </label>
+            <input type="datetime-local" id="date-to-input" class="w-full bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600/50 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-slate-500/70">
+          </div>
+        </div>
+
+        <!-- Charts Container -->
+        <div id="charts-container" class="grid grid-cols-1 gap-6">
+          <!-- Charts will be loaded here -->
+          <% if (Object.keys(devices).length === 0) { %>
+            <div class="col-span-full text-center py-16">
+              <div class="max-w-md mx-auto">
+                <div class="w-20 h-20 bg-gradient-to-br from-slate-600 to-slate-700 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <i class="fas fa-server text-gray-400 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-3">No Devices Configured</h3>
+                <p class="text-gray-400 mb-6 leading-relaxed">
+                  No SNMP devices have been configured yet. Please add devices from the Device Management page to start monitoring bandwidth usage.
+                </p>
+                <a href="/devices" class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/25 hover:-translate-y-0.5">
+                  <i class="fas fa-plus"></i>
+                  <span>Configure Devices</span>
+                </a>
+              </div>
+            </div>
+          <% } else { %>
+            <div class="col-span-full">
+              <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-12 shadow-xl text-center hover:shadow-2xl transition-all duration-300">
+                <div class="w-20 h-20 bg-gradient-to-br from-gray-600 to-gray-700 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <i class="fas fa-chart-line text-gray-400 text-3xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-white mb-2">No Data Loaded</h3>
+                <p class="text-gray-400 text-lg mb-6">Select a device and click "Load Data" to display bandwidth charts</p>
+                <div class="flex items-center justify-center gap-2 text-sm text-gray-500">
+                <i class="fas fa-lightbulb text-yellow-400"></i>
+                <span>Choose your device and interface to start monitoring</span>
+              </div>
+            </div>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+  <script>
+    // Toast notification system
+    function showToast(message, type = 'info', duration = 3000) {
+      const toastContainer = document.getElementById('toast-container');
+
+      const toast = document.createElement('div');
+      toast.className = `flex items-center p-4 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full max-w-sm`;
+
+      let iconClass = '';
+      let bgColor = '';
+
+      switch(type) {
+        case 'success':
+          iconClass = 'fas fa-check-circle';
+          bgColor = 'bg-green-500';
+          break;
+        case 'error':
+          iconClass = 'fas fa-exclamation-circle';
+          bgColor = 'bg-red-500';
+          break;
+        case 'warning':
+          iconClass = 'fas fa-exclamation-triangle';
+          bgColor = 'bg-yellow-500';
+          break;
+        default:
+          iconClass = 'fas fa-info-circle';
+          bgColor = 'bg-blue-500';
+      }
+
+      toast.classList.add(bgColor, 'text-white');
+
+      toast.innerHTML = `
+        <i class="${iconClass} mr-3"></i>
+        <span class="flex-1">${message}</span>
+        <button onclick="this.parentElement.remove()" class="ml-3 hover:opacity-75">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+
+      toastContainer.appendChild(toast);
+
+      // Animate in
+      setTimeout(() => {
+        toast.classList.remove('translate-x-full');
+      }, 10);
+
+      // Auto remove
+      setTimeout(() => {
+        toast.classList.add('translate-x-full');
+        setTimeout(() => {
+          if (toast.parentElement) {
+            toast.remove();
+          }
+        }, 300);
+      }, duration);
+    }
+
+    let currentDevice = '<%= selectedDevice %>';
+    let selectedInterfaces = [];
+    let chartInstances = {}; // Store chart instances for cleanup
+    let pollingIntervalMs = '<%= pollingIntervalSeconds * 1000 %>'; // Auto-refresh interval from settings
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      const deviceSelector = document.getElementById('device-selector');
+      const timeRangeSelector = document.getElementById('time-range-selector');
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const sidebar = document.getElementById('sidebar');
+      const mobileOverlay = document.getElementById('mobile-overlay');
+
+      // Mobile menu toggle
+      mobileMenuButton.addEventListener('click', function() {
+        sidebar.classList.toggle('-translate-x-full');
+        mobileOverlay.classList.toggle('hidden');
+      });
+
+      // Close sidebar when clicking overlay
+      mobileOverlay.addEventListener('click', function() {
+        sidebar.classList.add('-translate-x-full');
+        mobileOverlay.classList.add('hidden');
+      });
+
+      // Load interfaces when device changes
+      deviceSelector.addEventListener('change', function() {
+        currentDevice = this.value;
+        if (currentDevice) {
+          loadInterfaces(currentDevice);
+        }
+      });
+
+      // Show/hide custom date inputs
+      timeRangeSelector.addEventListener('change', function() {
+        const customFromDiv = document.getElementById('custom-date-from');
+        const customToDiv = document.getElementById('custom-date-to');
+        
+        if (this.value === 'custom') {
+          customFromDiv.classList.remove('hidden');
+          customToDiv.classList.remove('hidden');
+        } else {
+          customFromDiv.classList.add('hidden');
+          customToDiv.classList.add('hidden');
+        }
+      });
+
+      // Load initial device if available
+      if (currentDevice) {
+        deviceSelector.value = currentDevice;
+        loadInterfaces(currentDevice);
+      }
+    });
+
+    function loadInterfaces(deviceId) {
+      fetch(`/api/devices/${deviceId}/interfaces`)
+        .then(response => response.json())
+        .then(interfaces => {
+          const selector = document.getElementById('interface-selector');
+          const currentValue = selector.value;
+          selector.innerHTML = '<option value="all">All Selected Interfaces</option>';
+          
+          // Get selected interfaces from config
+          fetch('/api/devices')
+            .then(r => r.json())
+            .then(devices => {
+              const device = devices[deviceId];
+              if (device && device.selectedInterfaces) {
+                selectedInterfaces = device.selectedInterfaces;
+                
+                // Convert to array of names for compatibility (support both old and new format)
+                const selectedNames = selectedInterfaces.map(i => typeof i === 'string' ? i : i.name);
+                
+                // Show only selected interfaces in dropdown
+                interfaces.forEach(iface => {
+                  if (selectedNames.includes(iface.name)) {
+                    const option = document.createElement('option');
+                    option.value = iface.name;
+                    option.textContent = iface.name;
+                    option.style.backgroundColor = 'rgb(51 65 85)';
+                    option.style.color = 'white';
+                    selector.appendChild(option);
+                  }
+                });
+              }
+            });
+          
+          selector.value = currentValue || 'all';
+        })
+        .catch(err => console.error('Error loading interfaces:', err));
+    }
+
+    function createInterfaceChart(interfaceName, rxData, txData, noDataYet = false) {
+      const container = document.getElementById('charts-container');
+      if (!container) {
+        console.error('Charts container not found!');
+        return;
+      }
+      
+      // Clear placeholder if first chart
+      if (container.children.length === 1 && container.children[0].classList.contains('col-span-full')) {
+        container.innerHTML = '';
+      }
+      
+      const chartIdRx = `chart-${interfaceName.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-_]/g, '_')}-rx`;
+      const chartIdTx = `chart-${interfaceName.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-_]/g, '_')}-tx`;
+      
+      // console.log(`Generated IDs: RX=${chartIdRx}, TX=${chartIdTx}`);
+      
+      // Create single card containing both RX and TX charts
+      const card = document.createElement('div');
+      card.className = 'bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-6 shadow-xl hover:shadow-2xl transition-all duration-300';
+      card.innerHTML = `
+        <div class="mb-6">
+          <div class="flex items-center gap-3 mb-2">
+            <div class="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-lg">
+              <i class="fas fa-chart-line text-white"></i>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-white">${interfaceName}</h3>
+              <p class="text-xs text-gray-400">Bandwidth Monitoring</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 text-sm">
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+              <span class="text-gray-400">RX (Download)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 bg-amber-500 rounded-full"></div>
+              <span class="text-gray-400">TX (Upload)</span>
+            </div>
+          </div>
+        </div>
+        <div class="space-y-8">
+          <!-- RX Chart -->
+          <div class="relative w-full" style="height: 280px;">
+            <div class="flex items-center gap-2 mb-3">
+              <div class="p-1 bg-gradient-to-br from-green-500 to-green-600 rounded shadow">
+                <i class="fas fa-arrow-down text-white text-xs"></i>
+              </div>
+              <span class="text-sm font-medium text-green-400">RX - Incoming Bandwidth</span>
+            </div>
+            <canvas id="${chartIdRx}" class="w-full h-full"></canvas>
+          </div>
+          
+          <!-- TX Chart -->
+          <div class="relative w-full" style="height: 280px;">
+            <div class="flex items-center gap-2 mb-3">
+              <div class="p-1 bg-gradient-to-br from-amber-500 to-orange-500 rounded shadow">
+                <i class="fas fa-arrow-up text-white text-xs"></i>
+              </div>
+              <span class="text-sm font-medium text-amber-400">TX - Outgoing Bandwidth</span>
+            </div>
+            <canvas id="${chartIdTx}" class="w-full h-full"></canvas>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
+      
+      // Create charts immediately after DOM elements are appended
+      createChartsForInterface(interfaceName, rxData, txData, chartIdRx, chartIdTx, noDataYet);
+    }
+
+    function createChartsForInterface(interfaceName, rxData, txData, chartIdRx, chartIdTx, noDataYet = false) {
+      // Destroy old charts if exist
+      if (chartInstances[chartIdRx]) {
+        chartInstances[chartIdRx].destroy();
+      }
+      if (chartInstances[chartIdTx]) {
+        chartInstances[chartIdTx].destroy();
+      }
+      
+      // Check if canvas elements exist
+      const canvasRx = document.getElementById(chartIdRx);
+      const canvasTx = document.getElementById(chartIdTx);
+      
+      if (!canvasRx) {
+        console.error(`Canvas element with ID '${chartIdRx}' not found for interface '${interfaceName}'`);
+        return;
+      }
+      if (!canvasTx) {
+        console.error(`Canvas element with ID '${chartIdTx}' not found for interface '${interfaceName}'`);
+        return;
+      }
+      
+      // Create RX chart (green line)
+      const ctxRx = canvasRx.getContext('2d');
+      
+      // Prepare RX data
+      let rxChartData;
+      if (noDataYet || rxData.length === 0) {
+        rxChartData = [];
+      } else {
+        rxChartData = rxData.map(d => ({
+          x: new Date(d.time).getTime(),
+          y: parseFloat(d.value)
+        }));
+      }
+      
+      chartInstances[chartIdRx] = new Chart(ctxRx, {
+        type: 'line',
+        data: {
+          datasets: [{
+            label: 'RX Bandwidth',
+            data: rxChartData,
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.15)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.3,
+            pointRadius: 2,
+            pointHoverRadius: 6,
+            pointBackgroundColor: '#10b981',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: {
+            padding: {
+              bottom: 20
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              enabled: !noDataYet,
+              backgroundColor: 'rgba(0, 0, 0, 0.9)',
+              titleColor: '#10b981',
+              bodyColor: '#ffffff',
+              borderColor: '#10b981',
+              borderWidth: 2,
+              padding: 12,
+              displayColors: false,
+              callbacks: {
+                label: function(context) {
+                  const value = context.parsed.y;
+                  if (value >= 1000) {
+                    return 'RX: ' + (value / 1000).toFixed(2) + ' Gbps';
+                  } else if (value >= 1) {
+                    return 'RX: ' + value.toFixed(2) + ' Mbps';
+                  } else if (value >= 0.001) {
+                    return 'RX: ' + (value * 1000).toFixed(2) + ' Kbps';
+                  } else if (value >= 0.000001) {
+                    return 'RX: ' + (value * 1000000).toFixed(0) + ' bps';
+                  } else {
+                    return 'RX: ' + value.toFixed(8) + ' Mbps';
+                  }
+                },
+                title: function(context) {
+                  if (context && context[0]) {
+                    const date = new Date(context[0].parsed.x);
+                    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' ' + 
+                           date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+                  }
+                  return '';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                displayFormats: {
+                  minute: 'HH:mm',
+                  hour: 'MMM dd HH:mm',
+                  day: 'MMM dd',
+                  week: 'MMM dd'
+                },
+                tooltipFormat: 'MMM dd, yyyy HH:mm:ss'
+              },
+              grid: {
+                color: 'rgba(100, 116, 139, 0.3)',
+                drawBorder: false
+              },
+              ticks: {
+                color: '#94a3b8',
+                maxRotation: 45,
+                minRotation: 0
+              }
+            },
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: 'rgba(100, 116, 139, 0.3)',
+                drawBorder: false
+              },
+              ticks: {
+                color: '#94a3b8',
+                callback: function(value) {
+                  if (value >= 1000) {
+                    return (value / 1000).toFixed(1) + ' Gbps';
+                  } else if (value >= 1) {
+                    return value.toFixed(1) + ' Mbps';
+                  } else if (value >= 0.001) {
+                    return (value * 1000).toFixed(1) + ' Kbps';
+                  } else if (value >= 0.000001) {
+                    return (value * 1000000).toFixed(0) + ' bps';
+                  } else {
+                    return value.toFixed(8) + ' Mbps';
+                  }
+                }
+              }
+            }
+          },
+          spanGaps: false
+        },
+        plugins: noDataYet ? [{
+          id: 'noDataMessage',
+          afterDraw: function(chart) {
+            const { ctx, width, height } = chart;
+            ctx.save();
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = '#64748b';
+            ctx.font = '16px system-ui, -apple-system, sans-serif';
+            ctx.fillText('Waiting for data...', width / 2, height / 2);
+            ctx.restore();
+          }
+        }] : []
+      });
+      
+      // Create TX chart (orange line)
+      const ctxTx = canvasTx.getContext('2d');
+      
+      // Prepare TX data
+      let txChartData;
+      if (noDataYet || txData.length === 0) {
+        txChartData = [];
+      } else {
+        txChartData = txData.map(d => ({
+          x: new Date(d.time).getTime(),
+          y: parseFloat(d.value)
+        }));
+      }
+      
+      chartInstances[chartIdTx] = new Chart(ctxTx, {
+        type: 'line',
+        data: {
+          datasets: [{
+            label: 'TX Bandwidth',
+            data: txChartData,
+            borderColor: '#f59e0b',
+            backgroundColor: 'rgba(245, 158, 11, 0.15)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.3,
+            pointRadius: 2,
+            pointHoverRadius: 6,
+            pointBackgroundColor: '#f59e0b',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: {
+            padding: {
+              bottom: 20
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              enabled: !noDataYet,
+              backgroundColor: 'rgba(0, 0, 0, 0.9)',
+              titleColor: '#f59e0b',
+              bodyColor: '#ffffff',
+              borderColor: '#f59e0b',
+              borderWidth: 2,
+              padding: 12,
+              displayColors: false,
+              callbacks: {
+                label: function(context) {
+                  const value = context.parsed.y;
+                  if (value >= 1000) {
+                    return 'TX: ' + (value / 1000).toFixed(2) + ' Gbps';
+                  } else if (value >= 1) {
+                    return 'TX: ' + value.toFixed(2) + ' Mbps';
+                  } else if (value >= 0.001) {
+                    return 'TX: ' + (value * 1000).toFixed(2) + ' Kbps';
+                  } else if (value >= 0.000001) {
+                    return 'TX: ' + (value * 1000000).toFixed(0) + ' bps';
+                  } else {
+                    return 'TX: ' + value.toFixed(8) + ' Mbps';
+                  }
+                },
+                title: function(context) {
+                  if (context && context[0]) {
+                    const date = new Date(context[0].parsed.x);
+                    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' ' + 
+                           date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+                  }
+                  return '';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                displayFormats: {
+                  minute: 'HH:mm',
+                  hour: 'MMM dd HH:mm',
+                  day: 'MMM dd',
+                  week: 'MMM dd'
+                },
+                tooltipFormat: 'MMM dd, yyyy HH:mm:ss'
+              },
+              grid: {
+                color: 'rgba(100, 116, 139, 0.3)',
+                drawBorder: false
+              },
+              ticks: {
+                color: '#94a3b8',
+                maxRotation: 45,
+                minRotation: 0
+              }
+            },
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: 'rgba(100, 116, 139, 0.3)',
+                drawBorder: false
+              },
+              ticks: {
+                color: '#94a3b8',
+                callback: function(value) {
+                  if (value >= 1000) {
+                    return (value / 1000).toFixed(1) + ' Gbps';
+                  } else if (value >= 1) {
+                    return value.toFixed(1) + ' Mbps';
+                  } else if (value >= 0.001) {
+                    return (value * 1000).toFixed(1) + ' Kbps';
+                  } else if (value >= 0.000001) {
+                    return (value * 1000000).toFixed(0) + ' bps';
+                  } else {
+                    return value.toFixed(8) + ' Mbps';
+                  }
+                }
+              }
+            }
+          },
+          spanGaps: false
+        },
+        plugins: noDataYet ? [{
+          id: 'noDataMessage',
+          afterDraw: function(chart) {
+            const { ctx, width, height } = chart;
+            ctx.save();
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = '#64748b';
+            ctx.font = '16px system-ui, -apple-system, sans-serif';
+            ctx.fillText('Waiting for data...', width / 2, height / 2);
+            ctx.restore();
+          }
+        }] : []
+      });
+    }
+
+    function createCpuChart(deviceId, cpuData, noDataYet = false) {
+      const container = document.getElementById('charts-container');
+      if (!container) {
+        console.error('Charts container not found!');
+        return;
+      }
+      
+      const chartIdCpu = `chart-${deviceId}-cpu`;
+      
+      // Create CPU card
+      const card = document.createElement('div');
+      card.className = 'bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-6 shadow-xl hover:shadow-2xl transition-all duration-300';
+      card.innerHTML = `
+        <div class="mb-6">
+          <div class="flex items-center gap-3 mb-2">
+            <div class="p-2 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg shadow-lg">
+              <i class="fas fa-microchip text-white"></i>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-white">CPU Usage</h3>
+              <p class="text-xs text-gray-400">Device Performance</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 text-sm">
+            <span class="text-gray-400">Processor Utilization</span>
+            <span class="text-purple-400 font-semibold">(Percentage)</span>
+          </div>
+        </div>
+        <div class="relative w-full" style="height: 280px;">
+          <canvas id="${chartIdCpu}" class="w-full h-full"></canvas>
+        </div>
+      `;
+      container.appendChild(card);
+      
+      // Create CPU chart
+      createCpuChartInstance(deviceId, cpuData, chartIdCpu, noDataYet);
+    }
+
+    function createCpuChartInstance(deviceId, cpuData, chartIdCpu, noDataYet = false) {
+      // Destroy old chart if exists
+      if (chartInstances[chartIdCpu]) {
+        chartInstances[chartIdCpu].destroy();
+      }
+      
+      const canvasCpu = document.getElementById(chartIdCpu);
+      if (!canvasCpu) {
+        console.error(`Canvas element with ID '${chartIdCpu}' not found for device '${deviceId}'`);
+        return;
+      }
+      
+      // Create CPU chart (purple line)
+      const ctxCpu = canvasCpu.getContext('2d');
+      
+      // Prepare CPU data
+      let cpuChartData;
+      if (noDataYet || cpuData.length === 0) {
+        cpuChartData = [];
+      } else {
+        cpuChartData = cpuData.map(d => ({
+          x: new Date(d.time).getTime(),
+          y: parseFloat(d.value)
+        }));
+      }
+      
+      chartInstances[chartIdCpu] = new Chart(ctxCpu, {
+        type: 'line',
+        data: {
+          datasets: [{
+            label: 'CPU Usage',
+            data: cpuChartData,
+            borderColor: '#a855f7',
+            backgroundColor: 'rgba(168, 85, 247, 0.15)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.3,
+            pointRadius: 2,
+            pointHoverRadius: 6,
+            pointBackgroundColor: '#a855f7',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: {
+            padding: {
+              bottom: 20
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              enabled: !noDataYet,
+              backgroundColor: 'rgba(0, 0, 0, 0.9)',
+              titleColor: '#a855f7',
+              bodyColor: '#ffffff',
+              borderColor: '#a855f7',
+              borderWidth: 2,
+              padding: 12,
+              displayColors: false,
+              callbacks: {
+                label: function(context) {
+                  return 'CPU: ' + context.parsed.y.toFixed(1) + '%';
+                },
+                title: function(context) {
+                  if (context && context[0]) {
+                    const date = new Date(context[0].parsed.x);
+                    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' ' + 
+                           date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+                  }
+                  return '';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                displayFormats: {
+                  minute: 'HH:mm',
+                  hour: 'MMM dd HH:mm',
+                  day: 'MMM dd',
+                  week: 'MMM dd'
+                },
+                tooltipFormat: 'MMM dd, yyyy HH:mm:ss'
+              },
+              grid: {
+                color: 'rgba(100, 116, 139, 0.3)',
+                drawBorder: false
+              },
+              ticks: {
+                color: '#94a3b8',
+                maxRotation: 45,
+                minRotation: 0
+              }
+            },
+            y: {
+              beginAtZero: true,
+              max: 100,
+              grid: {
+                color: 'rgba(100, 116, 139, 0.3)',
+                drawBorder: false
+              },
+              ticks: {
+                color: '#94a3b8',
+                callback: function(value) {
+                  return value + '%';
+                }
+              }
+            }
+          },
+          spanGaps: false
+        },
+        plugins: noDataYet ? [{
+          id: 'noDataMessage',
+          afterDraw: function(chart) {
+            const { ctx, width, height } = chart;
+            ctx.save();
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = '#64748b';
+            ctx.font = '16px system-ui, -apple-system, sans-serif';
+            ctx.fillText('Waiting for CPU data...', width / 2, height / 2);
+            ctx.restore();
+          }
+        }] : []
+      });
+    }
+
+    function loadChartData() {
+      const deviceSelector = document.getElementById('device-selector');
+      const availableDevices = deviceSelector.options.length - 1; // Subtract 1 for "Choose a device..." option
+
+      if (availableDevices === 0) {
+        const container = document.getElementById('charts-container');
+        container.innerHTML = `
+          <div class="col-span-full text-center py-16">
+            <div class="max-w-md mx-auto">
+              <div class="w-20 h-20 bg-gradient-to-br from-slate-600 to-slate-700 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <i class="fas fa-server text-gray-400 text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-bold text-white mb-3">No Devices Configured</h3>
+              <p class="text-gray-400 mb-6 leading-relaxed">
+                No SNMP devices have been configured yet. Please add devices from the Device Management page to start monitoring bandwidth usage.
+              </p>
+              <a href="/devices" class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/25 hover:-translate-y-0.5">
+                <i class="fas fa-plus"></i>
+                <span>Configure Devices</span>
+              </a>
+            </div>
+          </div>
+        `;
+        showToast('No devices available. Please configure devices first.', 'info');
+        return;
+      }
+
+      if (!currentDevice) {
+        showToast('Please select a device', 'warning');
+        return;
+      }
+
+      const container = document.getElementById('charts-container');
+      container.innerHTML = '<div class="col-span-full text-center py-8"><p class="text-gray-400"><i class="fas fa-spinner fa-spin mr-2"></i>Loading data...</p></div>';
+      
+      const timeRange = document.getElementById('time-range-selector').value;
+      let timeRangeParam = timeRange;
+      
+      if (timeRange === 'custom') {
+        const dateFrom = document.getElementById('date-from-input').value;
+        const dateTo = document.getElementById('date-to-input').value;
+        
+        if (!dateFrom || !dateTo) {
+          showToast('Please select both From and To dates', 'warning');
+          container.innerHTML = '<div class="col-span-full text-center py-12 text-gray-400"><i class="fas fa-chart-line text-4xl mb-4 opacity-50"></i><p>Select device and click "Load Data" to display bandwidth charts</p></div>';
+          return;
+        }
+        
+        const startDate = new Date(dateFrom);
+        const endDate = new Date(dateTo);
+        
+        if (startDate >= endDate) {
+          showToast('From date must be before To date', 'warning');
+          console.error('Invalid date range:', { dateFrom, dateTo });
+          container.innerHTML = '<div class="col-span-full text-center py-12 text-gray-400"><i class="fas fa-chart-line text-4xl mb-4 opacity-50"></i><p>Select device and click "Load Data" to display bandwidth charts</p></div>';
+          return;
+        }
+        
+        const startISO = startDate.toISOString();
+        const endISO = endDate.toISOString();
+        
+        timeRangeParam = `custom:${startISO},${endISO}`;
+        console.log('Custom date range - Valid:', { 
+          dateFrom, 
+          dateTo, 
+          startISO, 
+          endISO, 
+          timeRangeParam
+        });
+      }
+
+      // Clear old charts
+      Object.values(chartInstances).forEach(chart => chart.destroy());
+      chartInstances = {};
+
+      const interfaceSelector = document.getElementById('interface-selector').value;
+      
+      if (interfaceSelector === 'all' && selectedInterfaces.length > 0) {
+        // Load all selected interfaces
+        container.innerHTML = '';
+        let completed = 0;
+        let chartsCreated = 0;
+        let noDataMessageShown = false;
+        let chartCreationAttempts = 0;
+        let allDataLoaded = false;
+
+        // Load CPU data first
+        const cpuPromise = fetch(`/api/data?device=${encodeURIComponent(currentDevice)}&metric=cpu&timeRange=${encodeURIComponent(timeRangeParam)}`)
+          .then(response => response.json())
+          .catch(err => {
+            console.error('Error loading CPU data:', err);
+            return [];
+          });
+        
+        cpuPromise.then(cpuData => {
+          // Check if there's CPU data
+          const hasCpuData = cpuData.length > 0 && cpuData.some(d => d.value >= 0);
+          
+          if (hasCpuData) {
+            createCpuChart(currentDevice, cpuData);
+            chartsCreated++;
+          } else {
+            // Create CPU chart with empty data
+            createCpuChart(currentDevice, [], true);
+            chartsCreated++;
+          }
+        });
+
+        selectedInterfaces.forEach(iface => {
+          // Support both old format (string) and new format ({index, name})
+          const ifaceName = typeof iface === 'string' ? iface : iface.name;
+          
+          // Load RX data
+          const rxPromise = fetch(`/api/data?device=${encodeURIComponent(currentDevice)}&interface=${encodeURIComponent(ifaceName)}&direction=rx&timeRange=${encodeURIComponent(timeRangeParam)}`)
+            .then(response => response.json())
+            .catch(err => {
+              console.error(`Error loading RX data for ${ifaceName}:`, err);
+              return [];
+            });
+          
+          // Load TX data
+          const txPromise = fetch(`/api/data?device=${encodeURIComponent(currentDevice)}&interface=${encodeURIComponent(ifaceName)}&direction=tx&timeRange=${encodeURIComponent(timeRangeParam)}`)
+            .then(response => response.json())
+            .catch(err => {
+              console.error(`Error loading TX data for ${ifaceName}:`, err);
+              return [];
+            });
+          
+          // Wait for both RX and TX data
+          Promise.all([rxPromise, txPromise]).then(([rxData, txData]) => {
+            // Check if there's actual data
+            const hasRxData = rxData.length > 0 && rxData.some(d => d.value > 0.0001);
+            const hasTxData = txData.length > 0 && txData.some(d => d.value > 0.0001);
+            
+            // Create chart even if no data yet - show waiting message
+            chartCreationAttempts++;
+            
+            if (hasRxData || hasTxData) {
+              createInterfaceChart(ifaceName, rxData, txData);
+              chartsCreated++;
+            } else {
+              // Create chart with empty data and waiting message
+              createInterfaceChart(ifaceName, [], [], true); // true = no data yet
+              chartsCreated++;
+            }
+            
+            completed++;
+            
+            // Check if all interfaces have completed loading
+            if (completed === selectedInterfaces.length && !allDataLoaded) {
+              allDataLoaded = true;
+              
+              // Use requestAnimationFrame to ensure DOM is updated
+              requestAnimationFrame(() => {
+                setTimeout(() => {
+                  const charts = container.querySelectorAll('.bg-gradient-to-br');
+                  if (charts.length === 0 && !noDataMessageShown) {
+                    container.innerHTML = '<div class="col-span-full text-center py-12 text-gray-400"><i class="fas fa-chart-line text-4xl mb-4 opacity-50"></i><p>No interfaces with traffic data found for the selected time range</p></div>';
+                    noDataMessageShown = true;
+                  }
+                }, 100);
+              });
+            }
+          });
+        });
+      } else if (interfaceSelector !== 'all') {
+        // Load specific interface
+        container.innerHTML = '';
+        
+        // Load CPU data first
+        const cpuPromise = fetch(`/api/data?device=${encodeURIComponent(currentDevice)}&metric=cpu&timeRange=${encodeURIComponent(timeRangeParam)}`)
+          .then(response => response.json())
+          .catch(err => {
+            console.error('Error loading CPU data:', err);
+            return [];
+          });
+        
+        cpuPromise.then(cpuData => {
+          const hasCpuData = cpuData.length > 0 && cpuData.some(d => d.value >= 0);
+          
+          if (hasCpuData) {
+            createCpuChart(currentDevice, cpuData);
+          } else {
+            createCpuChart(currentDevice, [], true);
+          }
+        });
+        
+        // Load RX data
+        const rxPromise = fetch(`/api/data?device=${encodeURIComponent(currentDevice)}&interface=${encodeURIComponent(interfaceSelector)}&direction=rx&timeRange=${encodeURIComponent(timeRangeParam)}`)
+          .then(response => response.json())
+          .catch(err => {
+            console.error(`Error loading RX data for ${interfaceSelector}:`, err);
+            return [];
+          });
+        
+        // Load TX data
+        const txPromise = fetch(`/api/data?device=${encodeURIComponent(currentDevice)}&interface=${encodeURIComponent(interfaceSelector)}&direction=tx&timeRange=${encodeURIComponent(timeRangeParam)}`)
+          .then(response => response.json())
+          .catch(err => {
+            console.error(`Error loading TX data for ${interfaceSelector}:`, err);
+            return [];
+          });
+        
+        // Wait for both RX and TX data
+        Promise.all([rxPromise, txPromise]).then(([rxData, txData]) => {
+          const hasRxData = rxData.length > 0 && rxData.some(d => d.value > 0.0001);
+          const hasTxData = txData.length > 0 && txData.some(d => d.value > 0.0001);
+          
+          if (hasRxData || hasTxData) {
+            createInterfaceChart(interfaceSelector, rxData, txData);
+          } else {
+            // Still show CPU chart even if no interface data
+            // The CPU chart is already created above
+          }
+        }).catch(err => {
+          console.error('Error loading data:', err);
+          // CPU chart is still shown even if interface data fails
+        });
+      } else {
+        showToast('Please select interfaces from Device Management first', 'warning');
+        container.innerHTML = '<div class="col-span-full text-center py-12 text-gray-400"><i class="fas fa-chart-line text-4xl mb-4 opacity-50"></i><p>Select device and click "Load Data" to display bandwidth charts</p></div>';
+      }
+    }
+
+    // Update header system stats
+    function updateHeaderStats() {
+      fetch('/api/system-info')
+        .then(response => response.json())
+        .then(data => {
+          if (document.getElementById('header-cpu')) {
+            document.getElementById('header-cpu').textContent = data.cpuUsage + '%';
+          }
+          if (document.getElementById('header-memory')) {
+            const memUsedGB = (data.memory.used / 1024 / 1024 / 1024).toFixed(1);
+            const memTotalGB = (data.memory.total / 1024 / 1024 / 1024).toFixed(1);
+            document.getElementById('header-memory').textContent = `${memUsedGB}/${memTotalGB}GB`;
+          }
+          if (document.getElementById('header-storage') && data.storage) {
+            const storageUsedGB = (data.storage.used / 1024 / 1024 / 1024).toFixed(1);
+            const storageTotalGB = (data.storage.total / 1024 / 1024 / 1024).toFixed(1);
+            document.getElementById('header-storage').textContent = `${storageUsedGB}/${storageTotalGB}GB`;
+          }
+        })
+        .catch(err => console.error('Error fetching system info:', err));
+    }
+
+    // Initial update and periodic refresh
+    updateHeaderStats();
+    setInterval(updateHeaderStats, pollingIntervalMs); // Update every polling interval
+
+    // Generate Professional PDF Report
+    async function generatePDFReport() {
+      const deviceSelector = document.getElementById('device-selector');
+      const interfaceSelector = document.getElementById('interface-selector');
+      const timeRangeSelector = document.getElementById('time-range-selector');
+      
+      if (!currentDevice) {
+        showToast('Please select a device first', 'warning');
+        return;
+      }
+
+      if (Object.keys(chartInstances).length === 0) {
+        showToast('Please load data first before generating report', 'warning');
+        return;
+      }
+
+      showToast('Generating PDF report...', 'info', 5000);
+
+      try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('p', 'mm', 'a4');
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        const margin = 15;
+        let yPosition = margin;
+
+        // Header with gradient background
+        doc.setFillColor(30, 41, 59); // slate-900
+        doc.rect(0, 0, pageWidth, 45, 'F');
+        
+        // Logo/Icon circle
+        doc.setFillColor(59, 130, 246); // blue-500
+        doc.circle(margin + 8, 18, 8, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(16);
+        doc.setFont(undefined, 'bold');
+        doc.text('S', margin + 5.5, 21);
+
+        // Title
+        doc.setFontSize(22);
+        doc.setFont(undefined, 'bold');
+        doc.setTextColor(255, 255, 255);
+        doc.text('BANDWIDTH MONITORING REPORT', margin + 25, 20);
+        
+        // Subtitle
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'normal');
+        doc.setTextColor(203, 213, 225); // slate-300
+        doc.text('SNMP Network Performance Analysis', margin + 25, 27);
+
+        // Report metadata box
+          doc.setFillColor(51, 65, 85); // slate-700
+          doc.roundedRect(margin, 32, pageWidth - (margin * 2), 10, 2, 2, 'F');
+          doc.setFontSize(8);
+          doc.setTextColor(226, 232, 240); // slate-200
+          const reportDate = new Date().toLocaleString('en-US', { 
+            year: 'numeric', month: 'short', day: 'numeric',
+            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false 
+          });
+          doc.text(`Generated: ${reportDate}`, margin + 3, 38);
+          doc.text(`Device: ${deviceSelector.options[deviceSelector.selectedIndex].text}`, pageWidth / 2, 38);
+          doc.text(`Time Range: ${timeRangeSelector.options[timeRangeSelector.selectedIndex].text}`, pageWidth - margin - 3, 38, { align: 'right' });
+
+          yPosition = 50;
+
+          // Device Information Section
+          doc.setFillColor(248, 250, 252); // slate-50
+          doc.rect(margin, yPosition, pageWidth - (margin * 2), 20, 'F');
+          doc.setDrawColor(203, 213, 225); // slate-300
+          doc.setLineWidth(0.8);
+          doc.rect(margin, yPosition, pageWidth - (margin * 2), 20);        doc.setFontSize(12);
+        doc.setFont(undefined, 'bold');
+        doc.setTextColor(15, 23, 42); // slate-900
+        doc.text('DEVICE INFORMATION', margin + 3, yPosition + 6);
+        
+        doc.setFontSize(9);
+        doc.setFont(undefined, 'normal');
+        doc.setTextColor(51, 65, 85); // slate-700
+        doc.text(`Device ID: ${currentDevice}`, margin + 3, yPosition + 12);
+        doc.text(`Device Name: ${deviceSelector.options[deviceSelector.selectedIndex].text}`, margin + 3, yPosition + 17);
+        
+        const selectedInterface = interfaceSelector.value === 'all' ? 
+          `All Interfaces (${selectedInterfaces.length})` : 
+          interfaceSelector.options[interfaceSelector.selectedIndex].text;
+        doc.text(`Interface: ${selectedInterface}`, pageWidth / 2 + 5, yPosition + 12);
+        doc.text(`Report Type: Bandwidth Analysis`, pageWidth / 2 + 5, yPosition + 17);
+
+        yPosition += 28;
+
+        // Statistics Summary Section
+        const statsData = await calculateStatistics();
+        
+        doc.setFillColor(239, 246, 255); // blue-50
+        doc.rect(margin, yPosition, pageWidth - (margin * 2), 35, 'F');
+        doc.setDrawColor(191, 219, 254); // blue-200
+        doc.rect(margin, yPosition, pageWidth - (margin * 2), 35);
+
+        doc.setFontSize(12);
+        doc.setFont(undefined, 'bold');
+        doc.setTextColor(30, 64, 175); // blue-800
+        doc.text('BANDWIDTH STATISTICS', margin + 3, yPosition + 6);
+
+        // Statistics grid
+        const statBoxWidth = (pageWidth - (margin * 2) - 9) / 4;
+        const statBoxes = [
+          { label: 'Peak RX', value: statsData.peakRx, color: [16, 185, 129], icon: '↓' },
+          { label: 'Peak TX', value: statsData.peakTx, color: [245, 158, 11], icon: '↑' },
+          { label: 'Avg RX', value: statsData.avgRx, color: [59, 130, 246], icon: '↓' },
+          { label: 'Avg TX', value: statsData.avgTx, color: [168, 85, 247], icon: '↑' }
+        ];
+
+        statBoxes.forEach((stat, index) => {
+          const x = margin + 3 + (index * (statBoxWidth + 3));
+          const y = yPosition + 12;
+          
+          doc.setFillColor(255, 255, 255);
+          doc.roundedRect(x, y, statBoxWidth, 18, 1, 1, 'F');
+          doc.setDrawColor(...stat.color);
+          doc.setLineWidth(0.8);
+          doc.roundedRect(x, y, statBoxWidth, 18, 1, 1);
+          
+          doc.setFontSize(8);
+          doc.setTextColor(100, 116, 139); // slate-500
+          doc.text(stat.label, x + statBoxWidth / 2, y + 5, { align: 'center' });
+          
+          doc.setFontSize(11);
+          doc.setFont(undefined, 'bold');
+          doc.setTextColor(...stat.color);
+          doc.text(stat.value, x + statBoxWidth / 2, y + 12, { align: 'center' });
+          
+          doc.setFontSize(7);
+          doc.setFont(undefined, 'normal');
+          doc.setTextColor(148, 163, 184); // slate-400
+          doc.text('Mbps', x + statBoxWidth / 2, y + 16, { align: 'center' });
+        });
+
+        yPosition += 43;
+
+        // Charts Section
+        doc.setFontSize(12);
+        doc.setFont(undefined, 'bold');
+        doc.setTextColor(15, 23, 42); // slate-900
+        doc.text('BANDWIDTH CHARTS', margin, yPosition);
+        yPosition += 8;
+
+        // Add charts to PDF
+        const chartKeys = Object.keys(chartInstances);
+        let chartCount = 0;
+
+        for (const chartKey of chartKeys) {
+          if (yPosition > pageHeight - 80) {
+            doc.addPage();
+            yPosition = margin;
+          }
+
+          const chart = chartInstances[chartKey];
+          const chartImageData = chart.toBase64Image();
+          
+          // Chart title
+          const isRx = chartKey.includes('-rx');
+          const interfaceName = chartKey.replace('chart-', '').replace('-rx', '').replace('-tx', '').replace(/-/g, ' ');
+          const direction = isRx ? 'RX (Download)' : 'TX (Upload)';
+          
+          doc.setFontSize(10);
+          doc.setFont(undefined, 'bold');
+          doc.setTextColor(51, 65, 85); // slate-700
+          doc.text(`${interfaceName} - ${direction}`, margin, yPosition);
+          
+          yPosition += 5;
+          
+          // Add chart image with border
+          const chartWidth = pageWidth - (margin * 2);
+          const chartHeight = 60;
+          
+          doc.setDrawColor(203, 213, 225); // slate-300
+          doc.setLineWidth(0.8);
+          doc.rect(margin, yPosition, chartWidth, chartHeight);
+          doc.addImage(chartImageData, 'PNG', margin + 1, yPosition + 1, chartWidth - 2, chartHeight - 2);
+          
+          yPosition += chartHeight + 8;
+          chartCount++;
+
+          // Maximum 4 interfaces per report (8 charts total) to keep it readable
+          if (chartCount >= 8) break;
+        }
+
+        // Footer on last page
+        const footerY = pageHeight - 15;
+        doc.setDrawColor(203, 213, 225);
+        doc.setLineWidth(0.8);
+        doc.line(margin, footerY, pageWidth - margin, footerY);
+        
+        doc.setFontSize(8);
+        doc.setTextColor(100, 116, 139); // slate-500
+        doc.text('SMon - SNMP Network Monitoring System', margin, footerY + 5);
+        doc.text(`Page ${doc.internal.getNumberOfPages()}`, pageWidth - margin, footerY + 5, { align: 'right' });
+        doc.text('© 2025 Network Operations Center', pageWidth / 2, footerY + 5, { align: 'center' });
+
+        // Save PDF
+        const filename = `bandwidth-report-${currentDevice}-${new Date().toISOString().split('T')[0]}.pdf`;
+        doc.save(filename);
+        
+        showToast('PDF report generated successfully!', 'success');
+      } catch (error) {
+        console.error('Error generating PDF:', error);
+        showToast('Failed to generate PDF report', 'error');
+      }
+    }
+
+    // Calculate statistics from chart data
+    async function calculateStatistics() {
+      const stats = {
+        peakRx: '0.00',
+        peakTx: '0.00',
+        avgRx: '0.00',
+        avgTx: '0.00'
+      };
+
+      let rxValues = [];
+      let txValues = [];
+
+      Object.keys(chartInstances).forEach(key => {
+        const chart = chartInstances[key];
+        const dataset = chart.data.datasets[0];
+        const values = dataset.data.map(d => d.y);
+        
+        if (key.includes('-rx')) {
+          rxValues = rxValues.concat(values);
+        } else if (key.includes('-tx')) {
+          txValues = txValues.concat(values);
+        }
+      });
+
+      if (rxValues.length > 0) {
+        const maxRx = Math.max(...rxValues);
+        const avgRx = rxValues.reduce((a, b) => a + b, 0) / rxValues.length;
+        
+        // Format with appropriate unit
+        if (maxRx >= 1000) {
+          stats.peakRx = (maxRx / 1000).toFixed(2) + ' Gbps';
+        } else {
+          stats.peakRx = maxRx.toFixed(2) + ' Mbps';
+        }
+        
+        if (avgRx >= 1000) {
+          stats.avgRx = (avgRx / 1000).toFixed(2) + ' Gbps';
+        } else {
+          stats.avgRx = avgRx.toFixed(2) + ' Mbps';
+        }
+      }
+
+      if (txValues.length > 0) {
+        const maxTx = Math.max(...txValues);
+        const avgTx = txValues.reduce((a, b) => a + b, 0) / txValues.length;
+        
+        // Format with appropriate unit
+        if (maxTx >= 1000) {
+          stats.peakTx = (maxTx / 1000).toFixed(2) + ' Gbps';
+        } else {
+          stats.peakTx = maxTx.toFixed(2) + ' Mbps';
+        }
+        
+        if (avgTx >= 1000) {
+          stats.avgTx = (avgTx / 1000).toFixed(2) + ' Gbps';
+        } else {
+          stats.avgTx = avgTx.toFixed(2) + ' Mbps';
+        }
+      }
+
+      return stats;
+    }
+
+    // Auto-refresh every 1 minute (only if charts are currently displayed)
+    setInterval(() => {
+      const container = document.getElementById('charts-container');
+      const charts = container.querySelectorAll('.bg-gradient-to-br');
+      if (charts.length > 0) {
+        loadChartData();
+      }
+    }, 60000);
+  </script>
+</body>
+</html>

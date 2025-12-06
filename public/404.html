@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Not Found | SMon</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="manifest" href="/manifest.json">
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-gray-100 min-h-screen flex items-center justify-center p-4">
+  <div class="max-w-md mx-auto text-center">
+    <!-- Error Icon -->
+    <div class="w-24 h-24 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl">
+      <i class="fas fa-exclamation-triangle text-white text-3xl"></i>
+    </div>
+
+    <!-- Error Code -->
+    <div class="text-6xl font-bold text-white mb-4">404</div>
+
+    <!-- Title -->
+    <h1 class="text-2xl font-bold text-white mb-4">Page Not Found</h1>
+
+    <!-- Description -->
+    <p class="text-gray-400 mb-8 leading-relaxed">
+      The page you're looking for doesn't exist or has been moved.
+      Please check the URL or navigate back to the dashboard.
+    </p>
+
+    <!-- Action Buttons -->
+    <div class="space-y-4">
+      <a href="/" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 inline-block">
+        <i class="fas fa-home mr-2"></i>
+        Go to Dashboard
+      </a>
+
+      <button onclick="history.back()" class="w-full bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-gray-300 hover:text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 border border-slate-600 hover:border-slate-500">
+        <i class="fas fa-arrow-left mr-2"></i>
+        Go Back
+      </button>
+    </div>
+
+    <!-- Error Details -->
+    <div class="mt-8 bg-slate-800 rounded-xl p-4 border border-slate-700">
+      <div class="text-sm text-gray-400 mb-2">Error Details</div>
+      <div class="text-xs text-gray-500">
+        <div class="mb-1"><strong>Time:</strong> <span id="timestamp"></span></div>
+        <div><strong>URL:</strong> <span id="requested-url"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Set timestamp
+    document.getElementById('timestamp').textContent = new Date().toLocaleString();
+
+    // Set requested URL
+    document.getElementById('requested-url').textContent = window.location.pathname;
+  </script>
+</body>
+</html>

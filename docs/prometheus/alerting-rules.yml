@@ -1,0 +1,100 @@
+# Example Prometheus alerting rules for SMon
+# Add this to your alerting rules file
+
+groups:
+  - name: smon_alerts
+    rules:
+      # System alerts
+      - alert: HighCPUUsage
+        expr: smon_system_cpu_usage_percent > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage detected"
+          description: "CPU usage is {{ $value }}% for more than 5 minutes"
+
+      - alert: HighMemoryUsage
+        expr: smon_system_memory_usage_percent > 95
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High memory usage detected"
+          description: "Memory usage is {{ $value }}% for more than 5 minutes"
+
+      # Device alerts
+      - alert: DeviceOffline
+        expr: smon_device_status == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Device {{ $labels.device_id }} is offline"
+          description: "Device {{ $labels.device_id }} has been offline for more than 5 minutes"
+
+      # Ping alerts
+      - alert: PingTargetDown
+        expr: smon_ping_status == 0
+        for: 3m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Ping target {{ $labels.target }} is down"
+          description: "Ping target {{ $labels.target }} is unreachable for more than 3 minutes"
+
+      - alert: HighPingLatency
+        expr: smon_ping_response_time_ms > 100
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High ping latency to {{ $labels.target }}"
+          description: "Ping latency to {{ $labels.target }} is {{ $value }}ms for more than 5 minutes"
+
+      # Website alerts
+      - alert: WebsiteDown
+        expr: smon_website_status == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Website {{ $labels.target }} is down"
+          description: "Website {{ $labels.target }} is not responding for more than 2 minutes"
+
+      - alert: WebsiteSlowResponse
+        expr: smon_website_response_time_ms > 5000
+        for: 3m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Slow website response for {{ $labels.target }}"
+          description: "Website {{ $labels.target }} response time is {{ $value }}ms for more than 3 minutes"
+
+      - alert: SSLCertificateExpiring
+        expr: smon_website_ssl_expiry_days < 30
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: "SSL certificate for {{ $labels.target }} expiring soon"
+          description: "SSL certificate for {{ $labels.target }} expires in {{ $value }} days"
+
+      # Domain alerts
+      - alert: DomainExpiring
+        expr: smon_domain_expiry_days < 30
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: "Domain {{ $labels.domain }} expiring soon"
+          description: "Domain {{ $labels.domain }} expires in {{ $value }} days"
+
+      - alert: DomainExpired
+        expr: smon_domain_expiry_days < 0
+        for: 1h
+        labels:
+          severity: critical
+        annotations:
+          summary: "Domain {{ $labels.domain }} has expired"
+          description: "Domain {{ $labels.domain }} expired {{ $value | - }} days ago"

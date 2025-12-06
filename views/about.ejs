@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About SMon - SNMP Monitoring Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-gray-100 min-h-screen">
+  <div class="flex h-screen">
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-gradient-to-br from-slate-800 to-slate-900 p-3 rounded-xl border border-slate-700/50 shadow-xl hover:shadow-2xl hover:border-slate-600/70 transition-all duration-300 group">
+      <i class="fas fa-bars text-white group-hover:scale-110 transition-transform duration-200"></i>
+    </button>
+
+    <!-- Mobile Overlay -->
+    <div id="mobile-overlay" class="md:hidden fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-30 hidden"></div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="w-64 bg-gradient-to-b from-slate-950 to-slate-900 border-r border-slate-700/50 shadow-2xl flex flex-col fixed md:relative inset-y-0 left-0 z-40 transform -translate-x-full md:translate-x-0 transition-all duration-300 ease-in-out">
+      <!-- Header -->
+      <div class="p-6 border-b border-slate-700/50 bg-gradient-to-r from-slate-900/50 to-slate-800/50">
+        <div class="flex items-center gap-3 mb-1">
+          <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 group">
+            <i class="fas fa-chart-line text-white font-bold text-lg group-hover:scale-110 transition-transform duration-200"></i>
+          </div>
+          <div>
+            <h1 class="text-lg font-bold text-white">SMon</h1>
+            <p class="text-xs text-gray-400">SNMP Monitor</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="flex-1 px-4 py-6 overflow-y-auto">
+        <div class="space-y-2">
+          <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-chart-area w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Dashboard</span>
+          </a>
+          <a href="/monitoring" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-gauge-high w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Bandwidth Monitor</span>
+          </a>
+          <a href="/ping" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-network-wired w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Ping Monitor</span>
+          </a>
+          <a href="/websites" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-globe w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Website Monitor</span>
+          </a>
+          <a href="/domains" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-at w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Domain Monitor</span>
+          </a>
+          <a href="/devices" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-server w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Devices</span>
+          </a>
+          <a href="/history" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-history w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>History</span>
+          </a>
+          <a href="/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-cog w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Settings</span>
+          </a>
+          <a href="/about" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium transition-all hover:shadow-lg hover:shadow-blue-500/25 hover:scale-[1.02] group">
+            <i class="fas fa-info-circle w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>About</span>
+          </a>
+          <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-gradient-to-r hover:from-red-500/20 hover:to-red-600/20 hover:text-red-300 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] mt-4 group">
+            <i class="fas fa-sign-out-alt w-5 group-hover:scale-110 transition-transform duration-200"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </nav>
+
+      <!-- Footer -->
+      <div class="px-4 py-4 border-t border-slate-700/50 bg-gradient-to-r from-slate-900/30 to-slate-800/30">
+        <div class="text-xs text-gray-500 text-center">
+          <p class="font-medium">SNMP Monitor v2.0.1</p>
+          <p class="text-gray-600">Network Intelligence</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 overflow-auto">
+      <!-- Top Header -->
+      <div class="bg-gradient-to-r from-slate-950 to-slate-900 border-b border-slate-700/50 px-8 py-6 sticky top-0 z-10 shadow-xl">
+        <div class="flex justify-between items-center">
+          <div>
+            <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+              <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 group">
+                <i class="fas fa-info-circle text-white group-hover:scale-110 transition-transform duration-200"></i>
+              </div>
+              About SMon
+            </h2>
+            <p class="text-gray-400 text-sm mt-1">Learn more about our SNMP Monitoring System</p>
+          </div>
+          <div class="flex items-center gap-6">
+            <!-- System Stats -->
+            <div class="flex items-center gap-4">
+              <div class="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl px-4 py-2 border border-slate-600/50 shadow-lg hover:shadow-xl transition-all duration-300 group">
+                <div class="flex items-center gap-2">
+                  <div class="w-6 h-6 bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-lg flex items-center justify-center group-hover:from-green-500/30 group-hover:to-green-600/30 transition-all duration-200">
+                    <i class="fas fa-microchip text-green-400 text-xs"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs text-gray-400">CPU</p>
+                    <p class="text-sm font-semibold text-white" id="header-cpu">0%</p>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl px-4 py-2 border border-slate-600/50 shadow-lg hover:shadow-xl transition-all duration-300 group">
+                <div class="flex items-center gap-2">
+                  <div class="w-6 h-6 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-lg flex items-center justify-center group-hover:from-blue-500/30 group-hover:to-blue-600/30 transition-all duration-200">
+                    <i class="fas fa-memory text-blue-400 text-xs"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs text-gray-400">Memory</p>
+                    <p class="text-sm font-semibold text-white" id="header-memory">0%</p>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl px-4 py-2 border border-slate-600/50 shadow-lg hover:shadow-xl transition-all duration-300 group">
+                <div class="flex items-center gap-2">
+                  <div class="w-6 h-6 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-lg flex items-center justify-center group-hover:from-purple-500/30 group-hover:to-purple-600/30 transition-all duration-200">
+                    <i class="fas fa-hdd text-purple-400 text-xs"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs text-gray-400">Storage</p>
+                    <p class="text-sm font-semibold text-white" id="header-storage">0%</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-sm text-gray-400"><i class="fas fa-circle text-green-500 mr-2"></i>System Operational</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="p-8 space-y-8">
+        <!-- Application Description -->
+        <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-8 shadow-2xl hover:shadow-3xl transition-all duration-300">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 group">
+              <i class="fas fa-network-wired text-white text-2xl group-hover:scale-110 transition-transform duration-200"></i>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold text-white">SMon - SNMP Monitoring Dashboard</h3>
+              <p class="text-gray-400">Advanced Network Monitoring Solution</p>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-8">
+            <div>
+              <h4 class="text-lg font-semibold text-white mb-4">Tentang Aplikasi</h4>
+              <p class="text-gray-300 leading-relaxed mb-4">
+                SMon adalah sistem monitoring jaringan canggih yang menggunakan protokol SNMP (Simple Network Management Protocol)
+                untuk memantau performa bandwidth dan status perangkat jaringan secara real-time. Aplikasi ini dirancang untuk
+                memberikan visibilitas komprehensif terhadap infrastruktur jaringan dengan antarmuka yang user-friendly dan
+                responsif.
+              </p>
+              <p class="text-gray-300 leading-relaxed">
+                Dengan integrasi InfluxDB sebagai penyimpanan time-series data dan Chart.js untuk visualisasi, SMon mampu
+                menampilkan data bandwidth RX/TX dalam bentuk grafik yang informatif, memudahkan administrator jaringan
+                dalam menganalisis dan mengoptimalkan performa jaringan.
+              </p>
+            </div>
+
+            <div>
+              <h4 class="text-lg font-semibold text-white mb-4">Fitur Utama</h4>
+              <ul class="space-y-3">
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-chart-line text-blue-400 w-5"></i>
+                  <span class="text-gray-300">Real-time bandwidth monitoring dengan grafik interaktif</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-network-wired text-cyan-400 w-5"></i>
+                  <span class="text-gray-300">Ping monitoring: latency, packet loss, historical data</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-globe text-indigo-400 w-5"></i>
+                  <span class="text-gray-300">Website monitoring: availability, SSL certificates, response times</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-at text-orange-400 w-5"></i>
+                  <span class="text-gray-300">Domain monitoring: expiration dates, renewal tracking, alerts</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-server text-green-400 w-5"></i>
+                  <span class="text-gray-300">Multi-device SNMP polling dengan grouped targets</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-database text-purple-400 w-5"></i>
+                  <span class="text-gray-300">InfluxDB v2 integration dengan configurable settings</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-mobile-alt text-yellow-400 w-5"></i>
+                  <span class="text-gray-300">Responsive mobile-first design</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-cogs text-red-400 w-5"></i>
+                  <span class="text-gray-300">Configurable polling & ping intervals (5-300s)</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-bell text-orange-400 w-5"></i>
+                  <span class="text-gray-300">Smart notifications: down, timeout, high latency</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-tachometer-alt text-indigo-400 w-5"></i>
+                  <span class="text-gray-300">Real-time system stats: CPU, Memory, Storage, DB</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-chart-area text-teal-400 w-5"></i>
+                  <span class="text-gray-300">Time range filters: 1h, 6h, 24h, 7d, 30d, All Time</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-save text-pink-400 w-5"></i>
+                  <span class="text-gray-300">12-month data retention dengan automatic cleanup</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-shield-alt text-indigo-400 w-5"></i>
+                  <span class="text-gray-300">System health monitoring</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Technology Stack -->
+        <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-8 shadow-2xl hover:shadow-3xl transition-all duration-300">
+          <h4 class="text-xl font-bold text-white mb-6">Technology Stack</h4>
+          <div class="grid md:grid-cols-3 gap-6">
+            <div class="text-center bg-gradient-to-br from-slate-700/50 to-slate-600/50 rounded-xl p-6 border border-slate-600/30 hover:border-slate-500/50 transition-all duration-300 group">
+              <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-110">
+                <i class="fab fa-node-js text-white text-2xl"></i>
+              </div>
+              <h5 class="text-lg font-semibold text-white">Node.js</h5>
+              <p class="text-gray-400 text-sm">Backend Runtime</p>
+            </div>
+            <div class="text-center bg-gradient-to-br from-slate-700/50 to-slate-600/50 rounded-xl p-6 border border-slate-600/30 hover:border-slate-500/50 transition-all duration-300 group">
+              <div class="w-16 h-16 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-110">
+                <i class="fas fa-database text-white text-2xl"></i>
+              </div>
+              <h5 class="text-lg font-semibold text-white">InfluxDB</h5>
+              <p class="text-gray-400 text-sm">Time-Series Database</p>
+            </div>
+            <div class="text-center bg-gradient-to-br from-slate-700/50 to-slate-600/50 rounded-xl p-6 border border-slate-600/30 hover:border-slate-500/50 transition-all duration-300 group">
+              <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-110">
+                <i class="fas fa-chart-bar text-white text-2xl"></i>
+              </div>
+              <h5 class="text-lg font-semibold text-white">Chart.js</h5>
+              <p class="text-gray-400 text-sm">Data Visualization</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Website Monitoring Section -->
+        <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-8 shadow-2xl hover:shadow-3xl transition-all duration-300">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 group">
+              <i class="fas fa-globe text-white text-2xl group-hover:scale-110 transition-transform duration-200"></i>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold text-white">Website Monitoring</h3>
+              <p class="text-gray-400">Comprehensive Web Service Monitoring</p>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-8">
+            <div>
+              <h4 class="text-lg font-semibold text-white mb-4">Fitur Monitoring Website</h4>
+              <ul class="space-y-3">
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-check-circle text-green-400 w-5"></i>
+                  <span class="text-gray-300">Availability monitoring dengan HTTP status codes</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-clock text-blue-400 w-5"></i>
+                  <span class="text-gray-300">Response time tracking dalam milidetik</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-shield-alt text-yellow-400 w-5"></i>
+                  <span class="text-gray-300">SSL certificate validation & expiry monitoring</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-certificate text-purple-400 w-5"></i>
+                  <span class="text-gray-300">SSL issuer information & certificate details</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-history text-cyan-400 w-5"></i>
+                  <span class="text-gray-300">Historical data dengan time-series storage</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-bell text-red-400 w-5"></i>
+                  <span class="text-gray-300">Automated alerts untuk downtime & SSL expiry</span>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 class="text-lg font-semibold text-white mb-4">Website Status</h4>
+              <div id="website-status-about" class="space-y-4">
+                <div class="text-center py-8">
+                  <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-500 mx-auto mb-2"></div>
+                  <p class="text-gray-400">Loading website status...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Domain Monitoring Section -->
+        <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-8 shadow-2xl hover:shadow-3xl transition-all duration-300">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 group">
+              <i class="fas fa-at text-white text-2xl group-hover:scale-110 transition-transform duration-200"></i>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold text-white">Domain Monitoring</h3>
+              <p class="text-gray-400">Domain Expiration & Renewal Management</p>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-8">
+            <div>
+              <h4 class="text-lg font-semibold text-white mb-4">Fitur Domain Monitoring</h4>
+              <ul class="space-y-3">
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-calendar-alt text-blue-400 w-5"></i>
+                  <span class="text-gray-300">Expiration date tracking dengan visual timeline</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-clock text-yellow-400 w-5"></i>
+                  <span class="text-gray-300">Days remaining counter dengan warning alerts</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-building text-purple-400 w-5"></i>
+                  <span class="text-gray-300">Registrar information & contact details</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-sync-alt text-green-400 w-5"></i>
+                  <span class="text-gray-300">Auto-renewal status monitoring</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-bell text-red-400 w-5"></i>
+                  <span class="text-gray-300">Expiration alerts: 30, 7, 1 days before expiry</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <i class="fas fa-chart-pie text-cyan-400 w-5"></i>
+                  <span class="text-gray-300">Status distribution charts & analytics</span>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 class="text-lg font-semibold text-white mb-4">Domain Status Overview</h4>
+              <div id="domain-status-about" class="space-y-4">
+                <div class="text-center py-8">
+                  <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-500 mx-auto mb-2"></div>
+                  <p class="text-gray-400">Loading domain status...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dedication -->
+        <div class="bg-gradient-to-r from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-8 shadow-2xl hover:shadow-3xl transition-all duration-300">
+          <div class="text-center">
+            <div class="w-20 h-20 bg-gradient-to-br from-rose-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg hover:shadow-xl transition-all duration-300 group">
+              <i class="fas fa-heart text-white text-3xl group-hover:scale-110 transition-transform duration-200"></i>
+            </div>
+            <h4 class="text-2xl font-bold text-white mb-4">Dedikasi</h4>
+            <p class="text-gray-300 text-lg leading-relaxed max-w-3xl mx-auto">
+              Aplikasi ini didedikasikan untuk <span class="text-rose-400 font-semibold">Almarhum Ananda M. Habibie El-Rizq</span>,
+              yang selalu memberikan inspirasi dan motivasi dalam setiap langkah pengembangan teknologi dan inovasi.
+              Semoga aplikasi ini dapat memberikan manfaat bagi banyak orang, sebagaimana beliau telah memberikan
+              kontribusi yang berharga dalam kehidupan kita.
+            </p>
+            <div class="mt-6 pt-6 border-t border-slate-600/50">
+              <p class="text-gray-400 italic">
+                "Dalam kenangan yang abadi, inovasi terus berkembang"
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Version Info -->
+        <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-6 shadow-2xl hover:shadow-3xl transition-all duration-300">
+          <div class="flex justify-between items-center">
+            <div>
+              <h5 class="text-lg font-semibold text-white">SMon v2.0.1</h5>
+              <p class="text-gray-400 text-sm">Network Intelligence Platform</p>
+            </div>
+            <div class="text-right">
+              <p class="text-gray-400 text-sm">Built with ❤️ using modern web technologies</p>
+              <p class="text-gray-500 text-xs mt-1">November 2025</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Script -->
+  <script>
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileOverlay = document.getElementById('mobile-overlay');
+    const sidebar = document.getElementById('sidebar');
+    let pollingIntervalMs = <%= pollingIntervalSeconds * 1000 %>; // Auto-refresh interval from settings
+
+    mobileMenuButton.addEventListener('click', () => {
+      sidebar.classList.toggle('-translate-x-full');
+      mobileOverlay.classList.toggle('hidden');
+    });
+
+    mobileOverlay.addEventListener('click', () => {
+      sidebar.classList.add('-translate-x-full');
+      mobileOverlay.classList.add('hidden');
+    });
+
+    // Update header system stats
+    function updateHeaderStats() {
+      fetch('/api/system-info')
+        .then(response => response.json())
+        .then(data => {
+          if (document.getElementById('header-cpu')) {
+            document.getElementById('header-cpu').textContent = data.cpuUsage + '%';
+          }
+          if (document.getElementById('header-memory')) {
+            const memUsedGB = (data.memory.used / 1024 / 1024 / 1024).toFixed(1);
+            const memTotalGB = (data.memory.total / 1024 / 1024 / 1024).toFixed(1);
+            document.getElementById('header-memory').textContent = `${memUsedGB}/${memTotalGB}GB`;
+          }
+          if (document.getElementById('header-storage') && data.storage) {
+            const storageUsedGB = (data.storage.used / 1024 / 1024 / 1024).toFixed(1);
+            const storageTotalGB = (data.storage.total / 1024 / 1024 / 1024).toFixed(1);
+            document.getElementById('header-storage').textContent = `${storageUsedGB}/${storageTotalGB}GB`;
+          }
+        })
+        .catch(err => console.error('Error fetching system info:', err));
+    }
+
+    // Load website monitoring status for about page
+    async function loadWebsiteStatusAbout() {
+      try {
+        const response = await fetch('/api/website-targets');
+        const targets = await response.json();
+
+        const statusContainer = document.getElementById('website-status-about');
+
+        if (targets.length === 0) {
+          statusContainer.innerHTML = `
+            <div class="text-center py-8 text-gray-400">
+              <i class="fas fa-globe text-3xl mb-2"></i>
+              <p>No websites configured</p>
+            </div>
+          `;
+          return;
+        }
+
+        // Load latest status for each target (limit to 5 for about page)
+        const statusPromises = targets.slice(0, 5).map(async (target) => {
+          try {
+            const historyResponse = await fetch(`/api/website-history/${target.id}`);
+            const historyData = await historyResponse.json();
+
+            if (historyData.data && historyData.data.length > 0) {
+              const latest = historyData.data[historyData.data.length - 1];
+              return { ...target, latest };
+            }
+            return { ...target, latest: null };
+          } catch (error) {
+            return { ...target, latest: null };
+          }
+        });
+
+        const targetsWithStatus = await Promise.all(statusPromises);
+
+        statusContainer.innerHTML = targetsWithStatus.map(target => {
+          const isEnabled = target.enabled;
+          const hasData = target.latest;
+          const isUp = hasData ? target.latest.up : false;
+          const responseTime = hasData ? target.latest.response_time : 0;
+          const sslValid = hasData ? target.latest.ssl_valid : false;
+
+          let statusColor, statusText, statusIcon;
+
+          if (!isEnabled) {
+            statusColor = 'gray';
+            statusText = 'Disabled';
+            statusIcon = 'times-circle';
+          } else if (!hasData) {
+            statusColor = 'yellow';
+            statusText = 'No Data';
+            statusIcon = 'question-circle';
+          } else if (isUp) {
+            statusColor = 'green';
+            statusText = `${responseTime}ms`;
+            statusIcon = 'check-circle';
+          } else {
+            statusColor = 'red';
+            statusText = 'Down';
+            statusIcon = 'times-circle';
+          }
+
+          const sslIcon = sslValid ? 'fas fa-shield-alt text-green-400' : 'fas fa-shield-alt text-red-400';
+
+          return `
+            <div class="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+              <div class="flex items-center gap-3">
+                <div class="w-3 h-3 bg-${statusColor}-500 rounded-full"></div>
+                <div class="min-w-0 flex-1">
+                  <p class="text-white font-medium text-sm truncate">${target.name}</p>
+                  <p class="text-gray-400 text-xs truncate">${target.url}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <i class="${sslIcon} text-xs"></i>
+                <div class="flex items-center gap-1">
+                  <i class="fas fa-${statusIcon} text-${statusColor}-400 text-xs"></i>
+                  <span class="text-${statusColor}-400 text-xs">${statusText}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        // Add summary if there are more targets
+        if (targets.length > 5) {
+          const remaining = targets.length - 5;
+          statusContainer.innerHTML += `
+            <div class="text-center py-2">
+              <p class="text-gray-400 text-xs">+${remaining} more websites</p>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('Error loading website status:', error);
+        document.getElementById('website-status-about').innerHTML = `
+          <div class="text-center py-8 text-red-400">
+            <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+            <p>Unable to load website status</p>
+          </div>
+        `;
+      }
+    }
+
+    // Load domain monitoring status for about page
+    async function loadDomainStatusAbout() {
+      try {
+        const response = await fetch('/api/domain-targets');
+        const domains = await response.json();
+
+        const statusContainer = document.getElementById('domain-status-about');
+
+        if (domains.length === 0) {
+          statusContainer.innerHTML = `
+            <div class="text-center py-8 text-gray-400">
+              <i class="fas fa-at text-3xl mb-2"></i>
+              <p>No domains configured</p>
+            </div>
+          `;
+          return;
+        }
+
+        // Show summary of domain status
+        const expired = domains.filter(d => new Date(d.expiration_date) < new Date()).length;
+        const expiringSoon = domains.filter(d => {
+          const daysLeft = Math.ceil((new Date(d.expiration_date) - new Date()) / (1000 * 60 * 60 * 24));
+          return daysLeft >= 0 && daysLeft <= 30;
+        }).length;
+        const active = domains.length - expired - expiringSoon;
+
+        statusContainer.innerHTML = `
+          <div class="grid grid-cols-3 gap-4 mb-4">
+            <div class="bg-green-500/20 rounded-lg p-3 text-center">
+              <div class="text-2xl font-bold text-green-400">${active}</div>
+              <div class="text-xs text-green-300">Active</div>
+            </div>
+            <div class="bg-yellow-500/20 rounded-lg p-3 text-center">
+              <div class="text-2xl font-bold text-yellow-400">${expiringSoon}</div>
+              <div class="text-xs text-yellow-300">Expiring Soon</div>
+            </div>
+            <div class="bg-red-500/20 rounded-lg p-3 text-center">
+              <div class="text-2xl font-bold text-red-400">${expired}</div>
+              <div class="text-xs text-red-300">Expired</div>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            ${domains.slice(0, 3).map(domain => {
+              const daysLeft = Math.ceil((new Date(domain.expiration_date) - new Date()) / (1000 * 60 * 60 * 24));
+              const isExpiringSoon = daysLeft <= 30;
+              const isExpired = daysLeft < 0;
+
+              let statusColor, statusText;
+
+              if (isExpired) {
+                statusColor = 'red';
+                statusText = 'Expired';
+              } else if (isExpiringSoon) {
+                statusColor = 'yellow';
+                statusText = `${daysLeft} days`;
+              } else {
+                statusColor = 'green';
+                statusText = `${daysLeft} days`;
+              }
+
+              return `
+                <div class="flex items-center justify-between p-2 bg-slate-700/30 rounded">
+                  <span class="text-white text-sm font-medium">${domain.name}</span>
+                  <span class="text-${statusColor}-400 text-xs">${statusText}</span>
+                </div>
+              `;
+            }).join('')}
+          </div>
+
+          ${domains.length > 3 ? `<div class="text-center pt-2"><p class="text-gray-400 text-xs">+${domains.length - 3} more domains</p></div>` : ''}
+        `;
+      } catch (error) {
+        console.error('Error loading domain status:', error);
+        document.getElementById('domain-status-about').innerHTML = `
+          <div class="text-center py-8 text-red-400">
+            <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+            <p>Unable to load domain status</p>
+          </div>
+        `;
+      }
+    }
+
+    // Initial update and periodic refresh
+    updateHeaderStats();
+    loadWebsiteStatusAbout();
+    loadDomainStatusAbout();
+    setInterval(updateHeaderStats, pollingIntervalMs); // Update based on polling interval
+    setInterval(loadWebsiteStatusAbout, pollingIntervalMs); // Update website status based on polling interval
+    setInterval(loadDomainStatusAbout, pollingIntervalMs); // Update domain status based on polling interval
+  </script>
+</body>
+</html>

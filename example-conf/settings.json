@@ -1,0 +1,79 @@
+{
+  "pollingInterval": 300000,
+  "pingInterval": 120000,
+  "dataRetention": 730,
+  "influxdb": {
+    "url": "",
+    "org": "",
+    "bucket": "",
+    "token": ""
+  },
+  "email": {
+    "smtp": {
+      "host": "",
+      "port": 587,
+      "secure": false,
+      "user": "",
+      "pass": ""
+    },
+    "from": "",
+    "to": "",
+    "notifyOnDeviceDown": false,
+    "notifyOnDeviceUp": false,
+    "notifyOnHighCpu": false,
+    "cpuThreshold": 80,
+    "notifyOnPingDown": false,
+    "notifyOnPingUp": false,
+    "notifyOnPingTimeout": false,
+    "notifyOnPingHighLatency": false,
+    "pingLatencyThreshold": 50
+  },
+  "pingNotifications": {
+    "enabled": true,
+    "notifyOnDown": true,
+    "notifyOnTimeout": true,
+    "notifyOnHighLatency": true,
+    "latencyThreshold": 50
+  },
+  "telegram": {
+    "enabled": false,
+    "botToken": "",
+    "chatId": "",
+    "notifyOnDeviceDown": false,
+    "notifyOnDeviceUp": false,
+    "notifyOnHighCpu": false,
+    "cpuThreshold": 80,
+    "notifyOnInterfaceDown": false,
+    "notifyOnPingDown": false,
+    "notifyOnPingUp": false,
+    "notifyOnPingTimeout": false,
+    "notifyOnPingHighLatency": false,
+    "pingLatencyThreshold": 50
+  },
+  "flapping": {
+    "enabled": true,
+    "deviceThreshold": 5,
+    "deviceWindowMinutes": 10,
+    "pingThreshold": 3,
+    "pingWindowMinutes": 5,
+    "suppressNotifications": true,
+    "notifyOnFlappingStart": true,
+    "notifyOnFlappingStop": true
+  },
+  "website": {
+    "enabled": true,
+    "interval": 300000,
+    "timeout": 10000,
+    "notifyOnDown": true,
+    "notifyOnUp": true,
+    "notifyOnSslExpiry": false,
+    "sslExpiryWarningDays": 30
+  },
+    "authentication": {
+    "enabled": true,
+    "username": "admin",
+    "password": "admin123",
+    "sessionTimeout": 86400000,
+    "comment": "Change username and password here for security. Session timeout in milliseconds (86400000 = 24 hours)"
+  }
+}

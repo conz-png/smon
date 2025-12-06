@@ -1,0 +1,20 @@
+{
+  "snmpDevices": [
+    {
+      "id": "router2",
+      "name": "Router 2",
+      "host": "192.168.1.1",
+      "community": "public",
+      "enabled": false,
+      "selectedInterfaces": []
+    },
+    {
+      "id": "switch1",
+      "name": "Switch 1",
+      "host": "192.168.1.10",
+      "community": "public",
+      "enabled": false,
+      "selectedInterfaces": []
+    }
+  ]
+}

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - SMon SNMP Monitoring Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-gray-100 min-h-screen">
+  <div class="min-h-screen flex">
+    <!-- Left Side - Application Description -->
+    <div class="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-slate-800 to-slate-900 p-12 flex-col justify-center">
+      <div class="max-w-md mx-auto">
+        <!-- Logo and Title -->
+        <div class="text-center mb-12">
+          <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-2xl">
+            <i class="fas fa-chart-line text-white text-3xl"></i>
+          </div>
+          <h1 class="text-4xl font-bold text-white mb-4">SMon</h1>
+          <p class="text-xl text-gray-300 mb-2">SNMP Monitoring Dashboard</p>
+          <p class="text-gray-400">Network Intelligence Platform</p>
+        </div>
+
+        <!-- Features -->
+        <div class="space-y-6 mb-12">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
+              <i class="fas fa-chart-area text-blue-400 text-xl"></i>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-white">Real-time Monitoring</h3>
+              <p class="text-gray-400 text-sm">Monitor bandwidth and network performance in real-time</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-cyan-500/20 rounded-lg flex items-center justify-center">
+              <i class="fas fa-network-wired text-cyan-400 text-xl"></i>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-white">Ping Monitoring</h3>
+              <p class="text-gray-400 text-sm">Latency, packet loss tracking with smart notifications</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-indigo-500/20 rounded-lg flex items-center justify-center">
+              <i class="fas fa-globe text-indigo-400 text-xl"></i>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-white">Website Monitoring</h3>
+              <p class="text-gray-400 text-sm">Monitor website availability, SSL certificates, and response times</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-orange-500/20 rounded-lg flex items-center justify-center">
+              <i class="fas fa-at text-orange-400 text-xl"></i>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-white">Domain Monitoring</h3>
+              <p class="text-gray-400 text-sm">Track domain expiration dates and renewal status</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center">
+              <i class="fas fa-mobile-alt text-purple-400 text-xl"></i>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-white">Responsive Design</h3>
+              <p class="text-gray-400 text-sm">Access from any device with modern responsive interface</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-orange-500/20 rounded-lg flex items-center justify-center">
+              <i class="fas fa-database text-orange-400 text-xl"></i>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-white">InfluxDB v2 Integration</h3>
+              <p class="text-gray-400 text-sm">Powerful time-series storage with configurable settings</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-teal-500/20 rounded-lg flex items-center justify-center">
+              <i class="fas fa-tachometer-alt text-teal-400 text-xl"></i>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-white">System Stats</h3>
+              <p class="text-gray-400 text-sm">Real-time CPU, Memory, Storage & Database monitoring</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-indigo-500/20 rounded-lg flex items-center justify-center">
+              <i class="fas fa-globe text-indigo-400 text-xl"></i>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-white">Website Monitoring</h3>
+              <p class="text-gray-400 text-sm">Monitor website availability, SSL certificates, and response times</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Technology Stack -->
+        <div class="border-t border-slate-700 pt-8">
+          <h4 class="text-lg font-semibold text-white mb-4 text-center">Powered by</h4>
+          <div class="flex justify-center gap-6">
+            <div class="text-center">
+              <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+                <i class="fab fa-node-js text-green-400"></i>
+              </div>
+              <span class="text-xs text-gray-400">Node.js</span>
+            </div>
+            <div class="text-center">
+              <div class="w-10 h-10 bg-cyan-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+                <i class="fas fa-database text-cyan-400"></i>
+              </div>
+              <span class="text-xs text-gray-400">InfluxDB</span>
+            </div>
+            <div class="text-center">
+              <div class="w-10 h-10 bg-orange-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+                <i class="fas fa-chart-bar text-orange-400"></i>
+              </div>
+              <span class="text-xs text-gray-400">Chart.js</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Side - Login Form -->
+    <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
+      <div class="w-full max-w-md space-y-8">
+        <!-- Mobile Logo (shown only on mobile) -->
+        <div class="lg:hidden text-center mb-8">
+          <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-2xl">
+            <i class="fas fa-chart-line text-white text-2xl"></i>
+          </div>
+          <h1 class="text-2xl font-bold text-white">SMon</h1>
+          <p class="text-gray-400">SNMP Monitoring Dashboard</p>
+        </div>
+
+        <!-- Website Monitoring Status -->
+        <div id="website-status-card" class="bg-slate-800/50 rounded-xl border border-slate-700/50 shadow-lg p-4 mb-6 hidden">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 bg-indigo-500/20 rounded-lg flex items-center justify-center">
+                <i class="fas fa-globe text-indigo-400"></i>
+              </div>
+              <div>
+                <p class="text-white text-sm font-medium">Website Monitoring</p>
+                <p id="website-status-text" class="text-gray-400 text-xs">Loading...</p>
+              </div>
+            </div>
+            <div id="website-status-indicator" class="flex items-center gap-2">
+              <div class="w-2 h-2 bg-gray-500 rounded-full animate-pulse"></div>
+              <span class="text-gray-400 text-xs">Checking</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Login Form -->
+        <div class="bg-slate-800 rounded-2xl border border-slate-700 shadow-2xl p-8">
+          <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold text-white mb-2">Welcome Back</h2>
+            <p class="text-gray-400">Sign in to access your network monitoring dashboard</p>
+          </div>
+
+          <!-- Login Form -->
+          <form class="space-y-6" action="/login" method="POST">
+            <!-- Username Field -->
+            <div>
+              <label for="username" class="block text-sm font-medium text-gray-300 mb-2">
+                <i class="fas fa-user mr-2"></i>Username
+              </label>
+              <div class="relative">
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  required
+                  class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  placeholder="Enter your username"
+                >
+                <i class="fas fa-user absolute right-3 top-3.5 text-gray-400"></i>
+              </div>
+            </div>
+
+            <!-- Password Field -->
+            <div>
+              <label for="password" class="block text-sm font-medium text-gray-300 mb-2">
+                <i class="fas fa-lock mr-2"></i>Password
+              </label>
+              <div class="relative">
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  required
+                  class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  placeholder="Enter your password"
+                >
+                <i class="fas fa-lock absolute right-3 top-3.5 text-gray-400"></i>
+              </div>
+            </div>
+
+            <!-- Remember Me & Forgot Password -->
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <input
+                  type="checkbox"
+                  id="remember"
+                  name="remember"
+                  class="w-4 h-4 bg-slate-700 border-slate-600 rounded focus:ring-blue-500 focus:ring-2"
+                >
+                <label for="remember" class="ml-2 text-sm text-gray-300">Remember me</label>
+              </div>
+              <a href="#" class="text-sm text-blue-400 hover:text-blue-300 transition-colors duration-200">
+                Forgot password?
+              </a>
+            </div>
+
+            <!-- Login Button -->
+            <button
+              type="submit"
+              class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+            >
+              <i class="fas fa-sign-in-alt mr-2"></i>Sign In
+            </button>
+          </form>
+
+          <!-- Demo Credentials -->
+          <div class="mt-8 p-4 bg-slate-700/50 rounded-lg border border-slate-600">
+            <h4 class="text-sm font-semibold text-gray-300 mb-2">
+              <i class="fas fa-info-circle mr-2"></i>Demo Credentials
+            </h4>
+            <div class="text-xs text-gray-400 space-y-1">
+              <p><strong>Username:</strong> admin</p>
+              <p><strong>Password:</strong> admin123</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-8">
+          <div class="mb-4">
+            <a href="/status" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white text-sm font-medium rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
+              <i class="fas fa-chart-line"></i>
+              View System Status
+            </a>
+          </div>
+          <p class="text-gray-400 text-sm">
+            SNMP Monitor v2.0.1 - Network Intelligence Platform
+          </p>
+          <p class="text-gray-500 text-xs mt-2">
+            © 2025 SMon. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success/Error Messages (if any) -->
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div id="error-message" class="fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+      <i class="fas fa-exclamation-triangle mr-2"></i><%= error %>
+    </div>
+  <% } %>
+
+  <% if (typeof success !== 'undefined' && success) { %>
+    <div id="success-message" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+      <i class="fas fa-check-circle mr-2"></i><%= success %>
+    </div>
+  <% } %>
+
+  <!-- Toast Notifications -->
+  <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+  <script>
+    // Toast notification system
+    function showToast(message, type = 'info', duration = 3000) {
+      const toastContainer = document.getElementById('toast-container');
+
+      const toast = document.createElement('div');
+      toast.className = `flex items-center p-4 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full max-w-sm`;
+
+      let iconClass = '';
+      let bgColor = '';
+
+      switch(type) {
+        case 'success':
+          iconClass = 'fas fa-check-circle';
+          bgColor = 'bg-green-500';
+          break;
+        case 'error':
+          iconClass = 'fas fa-exclamation-circle';
+          bgColor = 'bg-red-500';
+          break;
+        case 'warning':
+          iconClass = 'fas fa-exclamation-triangle';
+          bgColor = 'bg-yellow-500';
+          break;
+        default:
+          iconClass = 'fas fa-info-circle';
+          bgColor = 'bg-blue-500';
+      }
+
+      toast.classList.add(bgColor, 'text-white');
+
+      toast.innerHTML = `
+        <i class="${iconClass} mr-3"></i>
+        <span class="flex-1">${message}</span>
+        <button onclick="this.parentElement.remove()" class="ml-3 hover:opacity-75">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+
+      toastContainer.appendChild(toast);
+
+      // Animate in
+      setTimeout(() => {
+        toast.classList.remove('translate-x-full');
+      }, 10);
+
+      // Auto remove
+      setTimeout(() => {
+        toast.classList.add('translate-x-full');
+        setTimeout(() => {
+          if (toast.parentElement) {
+            toast.remove();
+          }
+        }, 300);
+      }, duration);
+    }
+
+    // Auto-hide messages after 5 seconds
+    setTimeout(() => {
+      const errorMsg = document.getElementById('error-message');
+      const successMsg = document.getElementById('success-message');
+      if (errorMsg) errorMsg.style.display = 'none';
+      if (successMsg) successMsg.style.display = 'none';
+    }, 5000);
+
+    // Load website monitoring status
+    async function loadWebsiteStatus() {
+      try {
+        const response = await fetch('/api/website-targets');
+        const targets = await response.json();
+
+        if (targets.length === 0) {
+          return; // Don't show card if no targets configured
+        }
+
+        const statusCard = document.getElementById('website-status-card');
+        const statusText = document.getElementById('website-status-text');
+        const statusIndicator = document.getElementById('website-status-indicator');
+
+        // Load latest status for each target
+        const statusPromises = targets.map(async (target) => {
+          try {
+            const historyResponse = await fetch(`/api/website-history/${target.id}`);
+            const historyData = await historyResponse.json();
+
+            if (historyData.data && historyData.data.length > 0) {
+              const latest = historyData.data[historyData.data.length - 1];
+              return { ...target, latest };
+            }
+            return { ...target, latest: null };
+          } catch (error) {
+            return { ...target, latest: null };
+          }
+        });
+
+        const targetsWithStatus = await Promise.all(statusPromises);
+
+        const upCount = targetsWithStatus.filter(t => t.latest && t.latest.up).length;
+        const totalCount = targetsWithStatus.length;
+
+        statusCard.classList.remove('hidden');
+
+        if (upCount === totalCount) {
+          statusText.textContent = `${upCount}/${totalCount} websites online`;
+          statusIndicator.innerHTML = `
+            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+            <span class="text-green-400 text-xs">All Up</span>
+          `;
+        } else if (upCount > 0) {
+          statusText.textContent = `${upCount}/${totalCount} websites online`;
+          statusIndicator.innerHTML = `
+            <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+            <span class="text-yellow-400 text-xs">Partial</span>
+          `;
+        } else {
+          statusText.textContent = `${upCount}/${totalCount} websites online`;
+          statusIndicator.innerHTML = `
+            <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+            <span class="text-red-400 text-xs">Down</span>
+          `;
+        }
+      } catch (error) {
+        console.error('Error loading website status:', error);
+        // Keep card hidden if there's an error
+      }
+    }
+
+    // Load website status on page load
+    loadWebsiteStatus();
+
+    // Form validation
+    document.querySelector('form').addEventListener('submit', function(e) {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (!username || !password) {
+        e.preventDefault();
+        showToast('Please fill in all fields', 'warning');
+        return false;
+      }
+    });
+  </script>
+</body>
+</html>
